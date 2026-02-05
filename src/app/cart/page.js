@@ -4,11 +4,21 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import CartItem from '@/components/CartItem';
 import { useCart } from '@/context/CartContext';
+import { useUser } from '@/context/UserContext';
 import { formatPrice } from '@/utils/helpers';
 
 export default function CartPage() {
     const router = useRouter();
     const { cartItems, getCartSubtotal, getCartTax, getDeliveryFee, getCartGrandTotal } = useCart();
+    const { user } = useUser();
+
+    const handleCheckout = () => {
+        if (user) {
+            router.push('/checkout');
+        } else {
+            router.push('/login');
+        }
+    };
 
     if (cartItems.length === 0) {
         return (
@@ -86,7 +96,7 @@ export default function CartPage() {
                             </div>
 
                             <button
-                                onClick={() => router.push('/checkout')}
+                                onClick={handleCheckout}
                                 className="w-full btn-primary text-lg py-4"
                             >
                                 Proceed to Checkout

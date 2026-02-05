@@ -89,20 +89,24 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full">
-                <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+            {/* Subtle background blur elements */}
+            <div className="absolute top-20 right-20 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-20 left-20 w-72 h-72 bg-cyan-500/5 rounded-full blur-3xl"></div>
+
+            <div className="max-w-md w-full relative z-10">
+                {/* Professional Glassmorphism Card */}
+                <div className="backdrop-blur-2xl bg-white/10 rounded-2xl p-8 border border-white/20 shadow-2xl">
                     {/* Header */}
                     <div className="text-center mb-8">
-                        <div className="text-5xl mb-4">🛒</div>
-                        <h2 className="text-3xl font-bold text-gray-800 mb-2">Create Account</h2>
-                        <p className="text-gray-600">Join FreshMart and start shopping</p>
+                        <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
+                        <p className="text-gray-300 text-sm">Join FreshMart and start shopping</p>
                     </div>
 
                     {/* Error Message */}
                     {errors.general && (
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                            <p className="text-sm text-red-800">{errors.general}</p>
+                        <div className="backdrop-blur-md bg-red-500/10 rounded-lg p-4 mb-6 border border-red-500/30">
+                            <p className="text-sm text-red-200">{errors.general}</p>
                         </div>
                     )}
 
@@ -110,105 +114,109 @@ export default function RegisterPage() {
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    First Name *
+                                <label className="block text-sm font-medium text-gray-200 mb-2">
+                                    First Name
                                 </label>
                                 <input
                                     type="text"
                                     name="firstName"
                                     value={formData.firstName}
                                     onChange={handleChange}
-                                    className={`input-field ${errors.firstName ? 'border-red-500' : ''}`}
+                                    className={`w-full px-4 py-2.5 rounded-lg backdrop-blur-md bg-white/10 border text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all duration-300 ${errors.firstName ? 'border-red-500/50 ring-2 ring-red-500/30' : 'border-white/20'}`}
                                     placeholder="John"
                                 />
-                                {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
+                                {errors.firstName && <p className="text-red-300 text-xs mt-1">{errors.firstName}</p>}
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Last Name *
+                                <label className="block text-sm font-medium text-gray-200 mb-2">
+                                    Last Name
                                 </label>
                                 <input
                                     type="text"
                                     name="lastName"
                                     value={formData.lastName}
                                     onChange={handleChange}
-                                    className={`input-field ${errors.lastName ? 'border-red-500' : ''}`}
+                                    className={`w-full px-4 py-2.5 rounded-lg backdrop-blur-md bg-white/10 border text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all duration-300 ${errors.lastName ? 'border-red-500/50 ring-2 ring-red-500/30' : 'border-white/20'}`}
                                     placeholder="Doe"
                                 />
-                                {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
+                                {errors.lastName && <p className="text-red-300 text-xs mt-1">{errors.lastName}</p>}
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Email Address *
+                            <label className="block text-sm font-medium text-gray-200 mb-2">
+                                Email Address
                             </label>
                             <input
                                 type="email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className={`input-field ${errors.email ? 'border-red-500' : ''}`}
+                                className={`w-full px-4 py-2.5 rounded-lg backdrop-blur-md bg-white/10 border text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all duration-300 ${errors.email ? 'border-red-500/50 ring-2 ring-red-500/30' : 'border-white/20'}`}
                                 placeholder="your@email.com"
                             />
-                            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                            {errors.email && <p className="text-red-300 text-xs mt-1">{errors.email}</p>}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Phone Number *
+                            <label className="block text-sm font-medium text-gray-200 mb-2">
+                                Phone Number
                             </label>
                             <input
                                 type="tel"
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
-                                className={`input-field ${errors.phone ? 'border-red-500' : ''}`}
+                                className={`w-full px-4 py-2.5 rounded-lg backdrop-blur-md bg-white/10 border text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all duration-300 ${errors.phone ? 'border-red-500/50 ring-2 ring-red-500/30' : 'border-white/20'}`}
                                 placeholder="+1 (555) 123-4567"
                             />
-                            {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+                            {errors.phone && <p className="text-red-300 text-xs mt-1">{errors.phone}</p>}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Password *
+                            <label className="block text-sm font-medium text-gray-200 mb-2">
+                                Password
                             </label>
                             <input
                                 type="password"
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className={`input-field ${errors.password ? 'border-red-500' : ''}`}
+                                className={`w-full px-4 py-2.5 rounded-lg backdrop-blur-md bg-white/10 border text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all duration-300 ${errors.password ? 'border-red-500/50 ring-2 ring-red-500/30' : 'border-white/20'}`}
                                 placeholder="••••••••"
                             />
-                            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+                            {errors.password && <p className="text-red-300 text-xs mt-1">{errors.password}</p>}
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                Confirm Password *
+                            <label className="block text-sm font-medium text-gray-200 mb-2">
+                                Confirm Password
                             </label>
                             <input
                                 type="password"
                                 name="confirmPassword"
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
-                                className={`input-field ${errors.confirmPassword ? 'border-red-500' : ''}`}
+                                className={`w-full px-4 py-2.5 rounded-lg backdrop-blur-md bg-white/10 border text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all duration-300 ${errors.confirmPassword ? 'border-red-500/50 ring-2 ring-red-500/30' : 'border-white/20'}`}
                                 placeholder="••••••••"
                             />
-                            {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
+                            {errors.confirmPassword && <p className="text-red-300 text-xs mt-1">{errors.confirmPassword}</p>}
                         </div>
 
-                        <div className="flex items-start">
-                            <input type="checkbox" required className="w-4 h-4 text-purple-600 rounded mt-1" />
-                            <span className="ml-2 text-sm text-gray-600">
+                        <div className="flex items-start pt-2">
+                            <input 
+                                type="checkbox" 
+                                required 
+                                className="w-4 h-4 rounded bg-white/10 border border-white/20 cursor-pointer accent-blue-400 mt-0.5" 
+                            />
+                            <span className="ml-2 text-sm text-gray-300">
                                 I agree to the{' '}
-                                <a href="#" className="text-purple-600 hover:text-purple-700 font-medium">
+                                <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors">
                                     Terms of Service
                                 </a>{' '}
                                 and{' '}
-                                <a href="#" className="text-purple-600 hover:text-purple-700 font-medium">
+                                <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors">
                                     Privacy Policy
                                 </a>
                             </span>
@@ -217,7 +225,7 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full btn-primary text-lg py-3"
+                            className="w-full mt-6 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold py-2.5 rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isLoading ? 'Creating account...' : 'Create Account'}
                         </button>
@@ -226,17 +234,17 @@ export default function RegisterPage() {
                     {/* Divider */}
                     <div className="relative my-6">
                         <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-gray-300"></div>
+                            <div className="w-full border-t border-white/10"></div>
                         </div>
                         <div className="relative flex justify-center text-sm">
-                            <span className="px-2 bg-white text-gray-500">Or</span>
+                            <span className="px-2 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-400">Or</span>
                         </div>
                     </div>
 
                     {/* Login Link */}
-                    <p className="text-center text-gray-600">
+                    <p className="text-center text-gray-300 text-sm">
                         Already have an account?{' '}
-                        <Link href="/login" className="text-purple-600 hover:text-purple-700 font-semibold">
+                        <Link href="/login" className="text-blue-400 hover:text-blue-300 font-semibold transition-colors">
                             Sign in
                         </Link>
                     </p>

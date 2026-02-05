@@ -37,19 +37,19 @@ export default function ProductCard({ product, badgeType = null }) {
     const badge = getBadge();
 
     return (
-        <Link href={`/products/${product.id}`} className="block group">
-            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 h-full flex flex-col">
-                {/* Product Image */}
-                <div className="relative aspect-square bg-gray-50 overflow-hidden">
-                    {/* Badge */}
-                    {badge && (
-                        <div className={`absolute top-2 left-2 z-10 ${badge.className}`}>
-                            {badge.text}
-                        </div>
-                    )}
+        <div className="relative group bg-white border-2 border-gray-100 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-500 h-full flex flex-col hover:border-green-300 transform hover:scale-105 active:scale-95">
+            {/* Product Image Link */}
+            <Link href={`/products/${product.id}`} className="block relative aspect-square bg-gradient-to-br from-[#F9F7F2] to-gray-100 overflow-hidden">
+                {/* Badge */}
+                {badge && (
+                    <div className={`absolute top-3 left-3 z-10 ${badge.className} text-[10px] font-bold py-1 px-2 rounded-md shadow-lg group-hover:shadow-xl transition-shadow`}>
+                        {badge.text}
+                    </div>
+                )}
 
-                    {/* Placeholder image - in production, use actual product image */}
-                    <div className="w-full h-full flex items-center justify-center text-6xl group-hover:scale-110 transition-transform duration-300">
+                {/* Image container with enhanced hover */}
+                <div className="w-full h-full flex items-center justify-center text-6xl group-hover:scale-125 transition-transform duration-700 relative">
+                    <span className={`drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-500 ${!product.inStock ? 'grayscale opacity-50' : ''}`}>
                         {product.category === 'vegetables' && '🥬'}
                         {product.category === 'fruits' && '🍎'}
                         {product.category === 'meat-fish' && '🥩'}
@@ -57,62 +57,67 @@ export default function ProductCard({ product, badgeType = null }) {
                         {product.category === 'packaged-food' && '🍝'}
                         {product.category === 'household' && '🧹'}
                         {!['vegetables', 'fruits', 'meat-fish', 'dairy', 'packaged-food', 'household'].includes(product.category) && '🛒'}
-                    </div>
+                    </span>
+                </div>
 
-                    {/* Out of stock overlay */}
-                    {!product.inStock && (
-                        <div className="absolute inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-                            <span className="bg-white text-gray-900 px-4 py-2 rounded-lg font-bold">
-                                Out of Stock
-                            </span>
-                        </div>
+                {/* Shine effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-500 transform -skew-x-12 group-hover:translate-x-full"></div>
+
+                {/* Sold Out Overlay */}
+                {!product.inStock && (
+                    <div className="absolute inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center">
+                        <span className="bg-[#003B4A] text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
+                            Sold Out
+                        </span>
+                    </div>
+                )}
+            </Link>
+
+            {/* Product Info */}
+            <div className="p-4 flex flex-col flex-grow relative">
+                <Link href={`/products/${product.id}`}>
+                    <h3 className="font-bold text-[#003B4A] mb-1 line-clamp-2 hover:text-green-600 transition-colors text-sm group-hover:line-clamp-none">
+                        {product.name}
+                    </h3>
+                </Link>
+
+                <p className="text-xs text-gray-400 mb-2">{product.unit || '1 unit'}</p>
+
+                <div className="flex items-center gap-1 mb-3">
+                    <span className="text-yellow-400 text-xs">★</span>
+                    <span className="text-xs font-bold text-gray-700">{product.rating}</span>
+                </div>
+
+                <div className="flex items-baseline gap-2 mt-auto">
+                    <span className="text-lg font-black text-[#003B4A] group-hover:text-green-600 transition-colors">
+                        {formatPrice(product.price)}
+                    </span>
+                    {product.discount > 0 && (
+                        <span className="text-xs text-gray-400 line-through">
+                            {formatPrice(product.originalPrice)}
+                        </span>
                     )}
                 </div>
 
-                {/* Product Info */}
-                <div className="p-4 flex flex-col flex-grow">
-                    {/* Product Name */}
-                    <h3 className="font-semibold text-gray-900 mb-1 line-clamp-2 group-hover:text-green-600 transition-colors">
-                        {product.name}
-                    </h3>
-
-                    {/* Unit Info */}
-                    <p className="text-sm text-gray-500 mb-2">{product.unit || '1 unit'}</p>
-
-                    {/* Rating */}
-                    <div className="flex items-center gap-1 mb-3">
-                        <span className="text-yellow-400">★</span>
-                        <span className="text-sm font-medium text-gray-700">{product.rating}</span>
-                        <span className="text-sm text-gray-400">({product.reviews})</span>
-                    </div>
-
-                    {/* Price */}
-                    <div className="flex items-baseline gap-2 mb-3 mt-auto">
-                        <span className="text-xl font-bold text-gray-900">
-                            {formatPrice(product.price)}
-                        </span>
-                        {product.discount > 0 && (
-                            <span className="text-sm text-gray-400 line-through">
-                                {formatPrice(product.originalPrice)}
-                            </span>
-                        )}
-                    </div>
-
-                    {/* Add to Cart Button */}
+                {/* Plus Button - Enhanced with animations */}
+                {product.inStock && (
                     <button
                         onClick={handleAddToCart}
-                        disabled={!product.inStock || isAdding}
-                        className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-300 ${product.inStock
-                                ? isAdding
-                                    ? 'bg-green-700 text-white'
-                                    : 'bg-green-600 text-white hover:bg-green-700'
-                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        disabled={isAdding}
+                        className={`absolute bottom-4 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 transform hover:scale-125 active:scale-90 ${isAdding
+                                ? 'bg-green-700 text-white shadow-xl scale-110'
+                                : 'bg-[#003B4A] text-white hover:bg-green-600 hover:shadow-2xl'
                             }`}
+                        aria-label="Add to cart"
                     >
-                        {isAdding ? '✓ Added!' : product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                        {isAdding ? (
+                            <span className="text-lg animate-in zoom-in">✓</span>
+                        ) : (
+                            <span className="text-2xl font-light">+</span>
+                        )}
                     </button>
-                </div>
+                )}
             </div>
-        </Link>
+        </div>
     );
 }
