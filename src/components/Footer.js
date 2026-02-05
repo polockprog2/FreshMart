@@ -27,10 +27,10 @@ export default function Footer() {
                     <div>
                         <div className="flex items-center gap-2 mb-4">
                             <span className="text-3xl">🛒</span>
-                            <span className="text-2xl font-bold text-green-400">FreshMart</span>
+                            <span className="text-2xl font-bold text-green-400">📦Baksho®</span>
                         </div>
                         <p className="text-gray-400 mb-4">
-                            Germany's trusted online grocery store. Fresh, authentic products delivered to your doorstep since 2024.
+                            Germany's trusted online grocery store. Fresh, authentic products delivered to your doorstep since 2026.
                         </p>
                         <div className="flex gap-4">
                             <a href="#" className="text-gray-400 hover:text-green-400 transition-colors" aria-label="Facebook">
@@ -118,7 +118,7 @@ export default function Footer() {
 
                 {/* Bottom Bar */}
                 <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                    <p>&copy; {currentYear} FreshMart. All rights reserved. | Made with ❤️ in Germany</p>
+                    <p>&copy; {currentYear} 📦Baksho®. All rights reserved. | Made with ❤️ in Germany</p>
                 </div>
             </div>
         </footer>

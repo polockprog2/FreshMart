@@ -74,7 +74,7 @@ export default function Navbar() {
                             <span>📦</span> FREE Shipping over 39€+ in DE
                         </div>
                         <div className="flex items-center gap-1.5 px-2">
-                            <span>🏅</span> Europe's #1 Indian Grocery Store
+                            <span>🏅</span> Europe's Startup Bangladeshi Grocery Store
                         </div>
                         <div className="flex items-center gap-1.5 px-2">
                             <span>💚</span> 130.000+ Happy Customers
