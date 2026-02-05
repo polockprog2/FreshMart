@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/ProductCard';
 import LoadingSpinner from '@/components/LoadingSpinner';
@@ -8,6 +8,16 @@ import { products } from '@/data/products';
 import { sortProducts, filterByCategory, searchProductsUtil } from '@/utils/helpers';
 
 export default function ProductsPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">
+            <LoadingSpinner size="lg" text="Loading products..." />
+        </div>}>
+            <ProductsContent />
+        </Suspense>
+    );
+}
+
+function ProductsContent() {
     const searchParams = useSearchParams();
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [sortBy, setSortBy] = useState('newest');
