@@ -1,10 +1,17 @@
+"use client";
+
 import Link from 'next/link';
+import { useLanguage } from '@/context/LanguageContext';
+import { translations } from '@/data/translations';
 
 /**
  * HeroBanner Component - Jamoona Style
  * Large hero banner with featured product/sale and CTA button
  */
 export default function HeroBanner() {
+    const { language } = useLanguage();
+    const t = translations[language] || translations.EN;
+
     return (
         <section className="relative bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-32">
@@ -15,19 +22,18 @@ export default function HeroBanner() {
                             🎉 Special Offer - Save Up to 30%
                         </div>
                         <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 mb-6 leading-tight">
-                            Fresh Groceries
-                            <span className="block bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Delivered to Your Door</span>
+                            {t.hero_title}
+                            <span className="block bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">{t.hero_subtitle}</span>
                         </h1>
                         <p className="text-lg md:text-xl text-gray-700 mb-10 max-w-xl leading-relaxed">
-                            Shop from 1,500+ authentic products. Free delivery on orders over €50.
-                            130,000+ happy customers trust us!
+                            {t.hero_desc}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                             <Link href="/products" className="btn-primary text-lg px-8 py-4 shadow-lg hover:shadow-2xl transform hover:scale-105 active:scale-95 transition-all duration-300">
-                                Shop Now
+                                {t.shop_now}
                             </Link>
                             <Link href="/categories" className="bg-white text-green-600 border-2 border-green-600 font-bold text-lg px-8 py-4 rounded-lg hover:bg-green-50 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95">
-                                View Categories
+                                {t.view_categories}
                             </Link>
                         </div>
                     </div>
@@ -37,7 +43,7 @@ export default function HeroBanner() {
                         <div className="relative w-full h-80 bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-2xl overflow-hidden border-2 border-green-100 group hover:shadow-3xl transition-all duration-500">
                             {/* Animated background gradient */}
                             <div className="absolute inset-0 bg-gradient-to-br from-green-100 via-emerald-100 to-teal-100 group-hover:from-green-200 group-hover:via-emerald-200 group-hover:to-teal-200 transition-all duration-700"></div>
-                            
+
                             {/* Content */}
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="text-center">

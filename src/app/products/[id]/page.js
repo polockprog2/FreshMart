@@ -7,6 +7,8 @@ import ProductCard from '@/components/ProductCard';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import ErrorMessage from '@/components/ErrorMessage';
 import { useCart } from '@/context/CartContext';
+import { useLanguage } from '@/context/LanguageContext';
+import { translations } from '@/data/translations';
 import { getProductById, products } from '@/data/products';
 import { formatPrice } from '@/utils/helpers';
 
@@ -14,6 +16,9 @@ export default function ProductDetailPage() {
     const params = useParams();
     const router = useRouter();
     const { addToCart } = useCart();
+    const { language } = useLanguage();
+    const t = translations[language] || translations.EN;
+
     const [product, setProduct] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [quantity, setQuantity] = useState(1);
@@ -22,25 +27,20 @@ export default function ProductDetailPage() {
     const [isAdding, setIsAdding] = useState(false);
 
     useEffect(() => {
-        // In production, this would be an API call:
-        // const data = await fetch(`/api/products/${params.id}`).then(r => r.json());
-
         const foundProduct = getProductById(params.id);
 
         if (foundProduct) {
             setProduct(foundProduct);
-
-            // Get related products from same category
             const related = products
                 .filter(p => p.category === foundProduct.category && p.id !== foundProduct.id)
                 .slice(0, 4);
             setRelatedProducts(related);
         } else {
-            setError('Product not found');
+            setError(t.product_not_found);
         }
 
         setIsLoading(false);
-    }, [params.id]);
+    }, [params.id, t.product_not_found]);
 
     const handleAddToCart = () => {
         setIsAdding(true);
@@ -50,17 +50,17 @@ export default function ProductDetailPage() {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <LoadingSpinner size="lg" text="Loading product..." />
+            <div className="min-h-screen flex items-center justify-center bg-[#F9F7F2]">
+                <LoadingSpinner size="lg" text={t.loading_product} />
             </div>
         );
     }
 
     if (error || !product) {
         return (
-            <div className="min-h-screen flex items-center justify-center p-8">
+            <div className="min-h-screen flex items-center justify-center p-8 bg-[#F9F7F2]">
                 <ErrorMessage
-                    message={error || 'Product not found'}
+                    message={error || t.product_not_found}
                     onRetry={() => router.push('/products')}
                 />
             </div>
@@ -68,23 +68,23 @@ export default function ProductDetailPage() {
     }
 
     return (
-        <div className="bg-gray-50 min-h-screen py-8">
+        <div className="bg-[#F9F7F2] min-h-screen py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Breadcrumb */}
-                <div className="flex items-center gap-2 text-sm text-gray-600 mb-8">
-                    <Link href="/" className="hover:text-purple-600">Home</Link>
-                    <span>/</span>
-                    <Link href="/products" className="hover:text-purple-600">Products</Link>
-                    <span>/</span>
-                    <span className="text-gray-800 font-medium">{product.name}</span>
-                </div>
+                <nav className="flex items-center gap-3 text-sm font-bold uppercase tracking-widest text-gray-400 mb-10 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                    <Link href="/" className="hover:text-[#003B4A] transition-colors">{t.home}</Link>
+                    <span className="text-[#003B4A]/20">/</span>
+                    <Link href="/products" className="hover:text-[#003B4A] transition-colors">{t.products}</Link>
+                    <span className="text-[#003B4A]/20">/</span>
+                    <span className="text-[#003B4A]">{product.name}</span>
+                </nav>
 
-                {/* Product Details */}
-                <div className="bg-white rounded-xl shadow-lg p-8 mb-12">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                        {/* Product Image */}
-                        <div className="relative">
-                            <div className="aspect-square bg-gray-100 rounded-xl flex items-center justify-center text-9xl">
+                {/* Product Details Card */}
+                <div className="bg-white rounded-[3rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 md:p-12 mb-20 border border-gray-100">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                        {/* Product Image Section */}
+                        <div className="relative group">
+                            <div className="aspect-square bg-[#F9F7F2] rounded-[2.5rem] flex items-center justify-center text-[12rem] shadow-inner transition-transform duration-500 group-hover:scale-105">
                                 {product.category === 'vegetables' && '🥬'}
                                 {product.category === 'fruits' && '🍎'}
                                 {product.category === 'meat-fish' && '🥩'}
@@ -94,122 +94,128 @@ export default function ProductDetailPage() {
                             </div>
 
                             {product.discount > 0 && (
-                                <div className="absolute top-4 right-4 badge-discount px-4 py-2 rounded-full text-lg font-bold">
-                                    {product.discount}% OFF
+                                <div className="absolute top-6 right-6 bg-red-500 text-white px-6 py-2 rounded-full text-xl font-black shadow-xl shadow-red-500/20">
+                                    {product.discount}% {t.off}
                                 </div>
                             )}
                         </div>
 
-                        {/* Product Info */}
-                        <div>
-                            <h1 className="text-4xl font-bold text-gray-800 mb-4">{product.name}</h1>
+                        {/* Product Info Section */}
+                        <div className="flex flex-col justify-center">
+                            <h1 className="text-4xl md:text-5xl font-black text-[#003B4A] mb-4 leading-tight">{product.name}</h1>
 
-                            {/* Rating */}
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="flex items-center">
+                            {/* Rating and Reviews */}
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="flex items-center bg-yellow-50 px-3 py-1 rounded-full border border-yellow-100">
                                     {[...Array(5)].map((_, i) => (
                                         <svg
                                             key={i}
-                                            className={`w-6 h-6 ${i < Math.floor(product.rating) ? 'text-yellow-400' : 'text-gray-300'}`}
+                                            className={`w-5 h-5 ${i < Math.floor(product.rating) ? 'text-yellow-400' : 'text-gray-200'}`}
                                             fill="currentColor"
                                             viewBox="0 0 20 20"
                                         >
                                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
                                     ))}
+                                    <span className="ml-2 font-black text-[#003B4A]">{product.rating}</span>
                                 </div>
-                                <span className="text-lg text-gray-600">
-                                    {product.rating} ({product.reviews} reviews)
+                                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">
+                                    {product.reviews} {t.reviews_label}
                                 </span>
                             </div>
 
-                            {/* Price */}
-                            <div className="flex items-center gap-4 mb-6">
-                                <span className="text-5xl font-bold text-purple-600">{formatPrice(product.price)}</span>
+                            {/* Pricing and Unit */}
+                            <div className="flex items-end gap-6 mb-10">
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">{t.unit}: {product.unit}</span>
+                                    <span className="text-5xl font-black text-green-600">{formatPrice(product.price)}</span>
+                                </div>
                                 {product.discount > 0 && (
-                                    <span className="text-2xl text-gray-400 line-through">{formatPrice(product.originalPrice)}</span>
+                                    <span className="text-2xl text-gray-300 line-through font-bold mb-1">{formatPrice(product.originalPrice)}</span>
                                 )}
                             </div>
 
-                            <p className="text-gray-600 mb-2">Unit: <span className="font-semibold">{product.unit}</span></p>
-
-                            {/* Stock Status */}
-                            <div className="mb-6">
+                            {/* Stock Status Badges */}
+                            <div className="mb-10">
                                 {product.inStock ? (
-                                    <span className="inline-flex items-center gap-2 text-green-600 font-semibold">
-                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                        </svg>
-                                        In Stock
+                                    <span className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-600 px-5 py-2 rounded-full font-black uppercase text-xs tracking-widest border border-emerald-100">
+                                        <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                                        {t.in_stock}
                                     </span>
                                 ) : (
-                                    <span className="inline-flex items-center gap-2 text-red-600 font-semibold">
-                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                                        </svg>
-                                        Out of Stock
+                                    <span className="inline-flex items-center gap-2 bg-red-50 text-red-600 px-5 py-2 rounded-full font-black uppercase text-xs tracking-widest border border-red-100">
+                                        <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                                        {t.out_of_stock}
                                     </span>
                                 )}
                             </div>
 
-                            {/* Description */}
-                            <div className="mb-8">
-                                <h3 className="text-xl font-bold text-gray-800 mb-3">Description</h3>
-                                <p className="text-gray-600 leading-relaxed">{product.description}</p>
+                            {/* Description Section */}
+                            <div className="mb-12">
+                                <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-4">{t.description}</h3>
+                                <p className="text-gray-600 leading-relaxed font-medium">{product.description}</p>
                             </div>
 
-                            {/* Quantity Selector */}
+                            {/* Order Controls */}
                             {product.inStock && (
-                                <div className="mb-6">
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Quantity</label>
-                                    <div className="flex items-center gap-4">
+                                <div className="space-y-8">
+                                    <div>
+                                        <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-4">{t.quantity}</h3>
+                                        <div className="flex items-center gap-6 bg-[#F9F7F2] w-fit p-1.5 rounded-full border border-gray-100">
+                                            <button
+                                                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                                className="w-12 h-12 rounded-full bg-white text-[#003B4A] shadow-md hover:bg-[#003B4A] hover:text-white transition-all duration-300 flex items-center justify-center font-black text-2xl"
+                                            >
+                                                -
+                                            </button>
+                                            <span className="text-2xl font-black text-[#003B4A] w-12 text-center">{quantity}</span>
+                                            <button
+                                                onClick={() => setQuantity(quantity + 1)}
+                                                className="w-12 h-12 rounded-full bg-white text-[#003B4A] shadow-md hover:bg-[#003B4A] hover:text-white transition-all duration-300 flex items-center justify-center font-black text-2xl"
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
                                         <button
-                                            onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                            className="w-12 h-12 rounded-full border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white transition-colors flex items-center justify-center font-bold text-xl"
+                                            onClick={handleAddToCart}
+                                            disabled={!product.inStock || isAdding}
+                                            className={`flex-1 py-5 px-10 rounded-2xl font-black text-lg uppercase tracking-widest transition-all duration-300 shadow-xl ${product.inStock
+                                                ? isAdding
+                                                    ? 'bg-emerald-500 text-white shadow-emerald-500/20 scale-[0.98]'
+                                                    : 'bg-[#003B4A] text-white hover:bg-[#003B4A]/90 shadow-[#003B4A]/20 active:scale-[0.98]'
+                                                : 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none'
+                                                }`}
                                         >
-                                            -
+                                            {isAdding ? `✓ ${t.added_to_cart}` : product.inStock ? t.add_to_cart : t.out_of_stock}
                                         </button>
-                                        <span className="text-2xl font-semibold w-16 text-center">{quantity}</span>
-                                        <button
-                                            onClick={() => setQuantity(quantity + 1)}
-                                            className="w-12 h-12 rounded-full border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white transition-colors flex items-center justify-center font-bold text-xl"
-                                        >
-                                            +
-                                        </button>
+
+                                        <Link href="/cart" className="sm:w-fit px-10 py-5 bg-white border-2 border-[#003B4A] text-[#003B4A] rounded-2xl font-black text-center text-lg uppercase tracking-widest hover:bg-[#003B4A] hover:text-white transition-all duration-300 active:scale-[0.98]">
+                                            {t.view_cart}
+                                        </Link>
                                     </div>
                                 </div>
                             )}
-
-                            {/* Add to Cart Button */}
-                            <div className="flex gap-4">
-                                <button
-                                    onClick={handleAddToCart}
-                                    disabled={!product.inStock || isAdding}
-                                    className={`flex-1 py-4 px-8 rounded-lg font-bold text-lg transition-all ${product.inStock
-                                            ? isAdding
-                                                ? 'bg-green-500 text-white'
-                                                : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:shadow-xl'
-                                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                        }`}
-                                >
-                                    {isAdding ? '✓ Added to Cart!' : product.inStock ? 'Add to Cart' : 'Out of Stock'}
-                                </button>
-
-                                <Link href="/cart" className="btn-secondary py-4 px-8 text-lg">
-                                    View Cart
-                                </Link>
-                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Related Products */}
+                {/* Related Products Section */}
                 {relatedProducts.length > 0 && (
-                    <div>
-                        <h2 className="text-3xl font-bold text-gray-800 mb-6">Related Products</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {relatedProducts.map((relatedProduct) => (
-                                <ProductCard key={relatedProduct.id} product={relatedProduct} />
+                    <div className="animate-fade-in-up">
+                        <div className="flex items-center justify-between mb-10">
+                            <h2 className="text-3xl font-black text-[#003B4A] uppercase tracking-wider">{t.related_products}</h2>
+                            <Link href="/products" className="text-green-600 font-black uppercase text-sm tracking-widest hover:underline transition-all underline-offset-8">
+                                {t.view_all} →
+                            </Link>
+                        </div>
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                            {relatedProducts.map((relatedProduct, index) => (
+                                <div key={relatedProduct.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
+                                    <ProductCard product={relatedProduct} />
+                                </div>
                             ))}
                         </div>
                     </div>

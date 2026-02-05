@@ -4,10 +4,15 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUser } from '@/context/UserContext';
+import { useLanguage } from '@/context/LanguageContext';
+import { translations } from '@/data/translations';
 
 export default function LoginPage() {
     const router = useRouter();
     const { login } = useUser();
+    const { language } = useLanguage();
+    const t = translations[language] || translations.EN;
+
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -54,8 +59,8 @@ export default function LoginPage() {
                 {/* Main Login Card */}
                 <div className="bg-white rounded-3xl p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100/50">
                     <div className="mb-8">
-                        <h1 className="text-2xl font-black text-[#003B4A] mb-2">Welcome Back</h1>
-                        <p className="text-gray-500 text-sm font-medium">Please enter your details to sign in.</p>
+                        <h1 className="text-2xl font-black text-[#003B4A] mb-2">{t.welcome_back}</h1>
+                        <p className="text-gray-500 text-sm font-medium">{t.login_subtitle}</p>
                     </div>
 
                     {/* Error Message */}
@@ -73,7 +78,7 @@ export default function LoginPage() {
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="space-y-1.5">
                             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest ml-1">
-                                Email Address
+                                {t.email_label}
                             </label>
                             <input
                                 type="email"
@@ -88,7 +93,7 @@ export default function LoginPage() {
 
                         <div className="space-y-1.5">
                             <label className="block text-xs font-black text-gray-400 uppercase tracking-widest ml-1">
-                                Password
+                                {t.password_label}
                             </label>
                             <input
                                 type="password"
@@ -112,10 +117,10 @@ export default function LoginPage() {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                     </svg>
                                 </div>
-                                <span className="ml-3 text-sm font-bold text-gray-500 group-hover:text-[#003B4A] transition-colors">Remember me</span>
+                                <span className="ml-3 text-sm font-bold text-gray-500 group-hover:text-[#003B4A] transition-colors">{t.remember_me}</span>
                             </label>
                             <a href="#" className="text-sm font-bold text-[#003B4A] hover:opacity-70 transition-opacity">
-                                Forgot Password?
+                                {t.forgot_password}
                             </a>
                         </div>
 
@@ -124,7 +129,7 @@ export default function LoginPage() {
                             disabled={isLoading}
                             className="w-full mt-4 bg-[#003B4A] text-white font-black py-4 rounded-2xl hover:bg-[#003B4A]/90 active:scale-[0.98] transition-all duration-300 shadow-xl shadow-[#003B4A]/10 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
                         >
-                            {isLoading ? 'Signing In...' : 'Sign In'}
+                            {isLoading ? '...' : t.sign_in}
                         </button>
                     </form>
 
@@ -134,7 +139,7 @@ export default function LoginPage() {
                             <div className="w-full border-t border-gray-100"></div>
                         </div>
                         <div className="relative flex justify-center text-xs uppercase font-black tracking-widest">
-                            <span className="px-4 bg-white text-gray-300">or continue with</span>
+                            <span className="px-4 bg-white text-gray-300">{t.or_continue}</span>
                         </div>
                     </div>
 
@@ -155,9 +160,9 @@ export default function LoginPage() {
                     </div>
 
                     <p className="text-center text-gray-500 text-sm font-bold">
-                        Don't have an account?{' '}
+                        {t.no_account}{' '}
                         <Link href="/register" className="text-[#003B4A] hover:underline transition-all">
-                            Sign Up
+                            {t.sign_up}
                         </Link>
                     </p>
                 </div>

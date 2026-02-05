@@ -1,33 +1,45 @@
+"use client";
+
 import Link from 'next/link';
 import CategoryCard from '@/components/CategoryCard';
 import { categories } from '@/data/categories';
+import { useLanguage } from '@/context/LanguageContext';
+import { translations } from '@/data/translations';
 
 export default function CategoriesPage() {
+    const { language } = useLanguage();
+    const t = translations[language] || translations.EN;
+
     return (
-        <div className="min-h-screen bg-gray-50 py-8">
+        <div className="min-h-screen bg-[#F9F7F2] py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold text-gray-800 mb-4">Shop by Category</h1>
-                    <p className="text-xl text-gray-600">
-                        Browse our wide selection of fresh groceries and household essentials
+                <div className="text-center mb-16">
+                    <h1 className="text-4xl md:text-5xl font-black text-[#003B4A] mb-4 uppercase tracking-tight">{t.shop_by_category}</h1>
+                    <p className="text-xl text-gray-500 max-w-2xl mx-auto font-medium">
+                        {t.categories_desc}
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8 mb-20">
                     {categories.map((category) => (
                         <CategoryCard key={category.id} category={category} />
                     ))}
                 </div>
 
                 {/* CTA Section */}
-                <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl p-12 text-center">
-                    <h2 className="text-3xl font-bold mb-4">Can't find what you're looking for?</h2>
-                    <p className="text-xl mb-6 text-purple-100">
-                        Browse all our products or use the search feature
-                    </p>
-                    <Link href="/products" className="btn-primary bg-white text-purple-600 hover:bg-gray-100 px-8 py-3">
-                        View All Products
-                    </Link>
+                <div className="bg-gradient-to-br from-[#003B4A] via-[#005F73] to-[#0A9396] text-white rounded-[3rem] p-12 md:p-16 text-center relative overflow-hidden shadow-2xl shadow-[#003B4A]/20">
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
+                    <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -ml-48 -mb-48"></div>
+
+                    <div className="relative z-10">
+                        <h2 className="text-3xl md:text-4xl font-black mb-6 uppercase tracking-wider">{t.cant_find}</h2>
+                        <p className="text-xl mb-10 text-teal-100 font-medium max-w-2xl mx-auto">
+                            {t.browse_all_products}
+                        </p>
+                        <Link href="/products" className="inline-block bg-white text-[#003B4A] px-12 py-4 rounded-full font-black text-lg uppercase tracking-widest hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg">
+                            {t.view_all_products}
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

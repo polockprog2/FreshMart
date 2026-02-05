@@ -6,9 +6,9 @@ export default function LoadingSpinner({ size = 'md', text = 'Loading...' }) {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center gap-3">
-            <div className={`${sizeClasses[size]} border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin`}></div>
-            {text && <p className="text-gray-600 font-medium">{text}</p>}
+        <div className="flex flex-col items-center justify-center gap-4">
+            <div className={`${sizeClasses[size]} border-[3px] border-[#F9F7F2] border-t-[#003B4A] rounded-full animate-spin`}></div>
+            {text && <p className="text-[#003B4A] font-black uppercase tracking-[0.2em] text-[10px]">{text}</p>}
         </div>
     );
 }

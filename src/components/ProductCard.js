@@ -4,14 +4,17 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { formatPrice } from '@/utils/helpers';
+import { useLanguage } from '@/context/LanguageContext';
+import { translations } from '@/data/translations';
 
 /**
  * ProductCard Component - Jamoona Style
- * Features: Sale badges, unit pricing, clean white design, add to cart inside tile
  */
 export default function ProductCard({ product, badgeType = null }) {
     const { addToCart } = useCart();
     const [isAdding, setIsAdding] = useState(false);
+    const { language } = useLanguage();
+    const t = translations[language] || translations.EN;
 
     const handleAddToCart = (e) => {
         e.preventDefault();
@@ -23,13 +26,13 @@ export default function ProductCard({ product, badgeType = null }) {
     // Determine badge based on product discount or badgeType prop
     const getBadge = () => {
         if (badgeType === 'weekly-deal') {
-            return { text: 'Weekly Deal', className: 'sale-badge' };
+            return { text: t.cat_weekly_deals, className: 'sale-badge' };
         }
         if (badgeType === 'value-deal' || product.discount >= 20) {
-            return { text: 'Value Deal', className: 'value-badge' };
+            return { text: t.cat_value_deals, className: 'value-badge' };
         }
         if (product.discount > 0) {
-            return { text: `–${product.discount}% SALE`, className: 'sale-badge' };
+            return { text: `–${product.discount}% ${t.sale}`, className: 'sale-badge' };
         }
         return null;
     };
@@ -42,7 +45,7 @@ export default function ProductCard({ product, badgeType = null }) {
             <Link href={`/products/${product.id}`} className="block relative aspect-square bg-gradient-to-br from-[#F9F7F2] to-gray-100 overflow-hidden">
                 {/* Badge */}
                 {badge && (
-                    <div className={`absolute top-3 left-3 z-10 ${badge.className} text-[10px] font-bold py-1 px-2 rounded-md shadow-lg group-hover:shadow-xl transition-shadow`}>
+                    <div className={`absolute top-3 left-3 z-10 ${badge.className} text-[10px] font-bold py-1 px-2 rounded-md shadow-lg group-hover:shadow-xl transition-shadow uppercase`}>
                         {badge.text}
                     </div>
                 )}
@@ -67,7 +70,7 @@ export default function ProductCard({ product, badgeType = null }) {
                 {!product.inStock && (
                     <div className="absolute inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center">
                         <span className="bg-[#003B4A] text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
-                            Sold Out
+                            {t.sold_out}
                         </span>
                     </div>
                 )}
@@ -81,7 +84,7 @@ export default function ProductCard({ product, badgeType = null }) {
                     </h3>
                 </Link>
 
-                <p className="text-xs text-gray-400 mb-2">{product.unit || '1 unit'}</p>
+                <p className="text-xs text-gray-400 mb-2">{product.unit || `1 unit`}</p>
 
                 <div className="flex items-center gap-1 mb-3">
                     <span className="text-yellow-400 text-xs">★</span>
@@ -105,10 +108,10 @@ export default function ProductCard({ product, badgeType = null }) {
                         onClick={handleAddToCart}
                         disabled={isAdding}
                         className={`absolute bottom-4 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 transform hover:scale-125 active:scale-90 ${isAdding
-                                ? 'bg-green-700 text-white shadow-xl scale-110'
-                                : 'bg-[#003B4A] text-white hover:bg-green-600 hover:shadow-2xl'
+                            ? 'bg-green-700 text-white shadow-xl scale-110'
+                            : 'bg-[#003B4A] text-white hover:bg-green-600 hover:shadow-2xl'
                             }`}
-                        aria-label="Add to cart"
+                        aria-label={t.add_to_cart}
                     >
                         {isAdding ? (
                             <span className="text-lg animate-in zoom-in">✓</span>

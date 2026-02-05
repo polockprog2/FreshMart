@@ -5,13 +5,16 @@ import { useState } from 'react';
 import { useCart } from '@/context/CartContext';
 import { useUser } from '@/context/UserContext';
 import SearchBar from './SearchBar';
+import { useLanguage } from '@/context/LanguageContext';
+import { translations } from '@/data/translations';
 
 /**
  * Navbar Component - Jamoona Reference Style
  */
 export default function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [language, setLanguage] = useState('EN');
+    const { language, changeLanguage } = useLanguage();
+    const t = translations[language] || translations.EN;
     const { getCartCount } = useCart();
     const { user, logout } = useUser();
 
@@ -71,16 +74,16 @@ export default function Navbar() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-wrap justify-between items-center text-[11px] font-bold text-gray-500 uppercase tracking-wider">
                         <div className="flex items-center gap-1.5 px-2">
-                            <span>📦</span> FREE Shipping over 39€+ in DE
+                            <span>📦</span> {t.announcement_shipping}
                         </div>
                         <div className="flex items-center gap-1.5 px-2">
-                            <span>🏅</span> Europe's Startup Bangladeshi Grocery Store
+                            <span>🏅</span> {t.announcement_startup}
                         </div>
                         <div className="flex items-center gap-1.5 px-2">
-                            <span>💚</span> 130.000+ Happy Customers
+                            <span>💚</span> {t.announcement_customers}
                         </div>
                         <div className="flex items-center gap-1.5 px-2">
-                            <span>🍛</span> Our Story: <Link href="/about" className="hover:text-[#003B4A] transition-colors ml-1">→ About Us</Link>
+                            <span>🍛</span> {t.announcement_about} <Link href="/about" className="hover:text-[#003B4A] transition-colors ml-1">→ {t.about_us}</Link>
                         </div>
                     </div>
                 </div>
@@ -105,12 +108,36 @@ export default function Navbar() {
                     {/* Icons Section */}
                     <div className="flex items-center gap-4 md:gap-6">
                         {/* Language Switcher */}
-                        <div className="flex items-center gap-1 text-sm font-bold text-[#003B4A] cursor-pointer hover:opacity-80 transition-opacity">
-                            <span className="text-lg">🇬🇧</span>
-                            <span className="hidden sm:inline uppercase">EN</span>
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                            </svg>
+                        <div className="relative group">
+                            <div className="flex items-center gap-1 text-sm font-bold text-[#003B4A] cursor-pointer hover:opacity-80 transition-opacity">
+                                <span className="text-lg">{language === 'EN' ? '🇬🇧' : '🇧🇩'}</span>
+                                <span className="hidden sm:inline uppercase">{language}</span>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+
+                            {/* Dropdown */}
+                            <div className="absolute top-full right-0 mt-2 bg-white border border-gray-100 rounded-lg shadow-xl py-2 w-32 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[100]">
+                                <button
+                                    onClick={() => changeLanguage('EN')}
+                                    className={`w-full text-left px-4 py-2 hover:bg-[#F9F7F2] flex items-center gap-2 text-xs font-bold ${language === 'EN' ? 'text-[#003B4A]' : 'text-gray-500'}`}
+                                >
+                                    <span>🇬🇧</span> ENGLISH
+                                </button>
+                                <button
+                                    onClick={() => changeLanguage('BN')}
+                                    className={`w-full text-left px-4 py-2 hover:bg-[#F9F7F2] flex items-center gap-2 text-xs font-bold ${language === 'BN' ? 'text-[#003B4A]' : 'text-gray-500'}`}
+                                >
+                                    <span>🇧🇩</span> বাংলা
+                                </button>
+                                <button
+                                    onClick={() => changeLanguage('DE')}
+                                    className={`w-full text-left px-4 py-2 hover:bg-[#F9F7F2] flex items-center gap-2 text-xs font-bold ${language === 'DE' ? 'text-[#003B4A]' : 'text-gray-500'}`}
+                                >
+                                    <span>🇩🇪</span> DEUTSCH
+                                </button>
+                            </div>
                         </div>
 
                         {/* Wishlist */}

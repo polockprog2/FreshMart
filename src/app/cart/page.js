@@ -5,12 +5,16 @@ import Link from 'next/link';
 import CartItem from '@/components/CartItem';
 import { useCart } from '@/context/CartContext';
 import { useUser } from '@/context/UserContext';
+import { useLanguage } from '@/context/LanguageContext';
+import { translations } from '@/data/translations';
 import { formatPrice } from '@/utils/helpers';
 
 export default function CartPage() {
     const router = useRouter();
     const { cartItems, getCartSubtotal, getCartTax, getDeliveryFee, getCartGrandTotal } = useCart();
     const { user } = useUser();
+    const { language } = useLanguage();
+    const t = translations[language] || translations.EN;
 
     const handleCheckout = () => {
         if (user) {
@@ -22,16 +26,16 @@ export default function CartPage() {
 
     if (cartItems.length === 0) {
         return (
-            <div className="min-h-screen bg-gray-50 py-16">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="bg-white rounded-xl shadow-lg p-12 text-center">
-                        <div className="text-8xl mb-6">🛒</div>
-                        <h2 className="text-3xl font-bold text-gray-800 mb-4">Your Cart is Empty</h2>
-                        <p className="text-gray-600 mb-8">
-                            Looks like you haven't added any items to your cart yet.
+            <div className="min-h-screen bg-[#F9F7F2] py-20">
+                <div className="max-w-xl mx-auto px-4">
+                    <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-12 text-center border border-gray-100">
+                        <div className="text-8xl mb-8">🛒</div>
+                        <h2 className="text-3xl font-black text-[#003B4A] mb-4">{t.cart_empty}</h2>
+                        <p className="text-gray-500 mb-10 font-medium">
+                            {t.cart_empty_desc}
                         </p>
-                        <Link href="/products" className="btn-primary text-lg px-8 py-4">
-                            Start Shopping
+                        <Link href="/products" className="inline-block bg-[#003B4A] text-white px-10 py-4 rounded-2xl font-black hover:bg-[#003B4A]/90 transition-all shadow-xl shadow-[#003B4A]/10 active:scale-95">
+                            {t.start_shopping}
                         </Link>
                     </div>
                 </div>
@@ -40,13 +44,13 @@ export default function CartPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-8">
+        <div className="min-h-screen bg-[#F9F7F2] py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 className="text-4xl font-bold text-gray-800 mb-8">Shopping Cart</h1>
+                <h1 className="text-4xl font-black text-[#003B4A] mb-10">{t.shopping_cart}</h1>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                     {/* Cart Items */}
-                    <div className="lg:col-span-2 space-y-4">
+                    <div className="lg:col-span-2 space-y-6">
                         {cartItems.map((item) => (
                             <CartItem key={item.id} item={item} />
                         ))}
@@ -54,59 +58,59 @@ export default function CartPage() {
 
                     {/* Order Summary */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white rounded-xl shadow-lg p-6 sticky top-20">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-6">Order Summary</h2>
+                        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 sticky top-28 border border-gray-100">
+                            <h2 className="text-2xl font-black text-[#003B4A] mb-8">{t.order_summary}</h2>
 
-                            <div className="space-y-4 mb-6">
-                                <div className="flex justify-between text-gray-600">
-                                    <span>Subtotal</span>
-                                    <span className="font-semibold">{formatPrice(getCartSubtotal())}</span>
+                            <div className="space-y-5 mb-8">
+                                <div className="flex justify-between text-gray-500 font-bold text-sm uppercase tracking-wider">
+                                    <span>{t.subtotal}</span>
+                                    <span className="text-[#003B4A]">{formatPrice(getCartSubtotal())}</span>
                                 </div>
 
-                                <div className="flex justify-between text-gray-600">
-                                    <span>Tax (8%)</span>
-                                    <span className="font-semibold">{formatPrice(getCartTax())}</span>
+                                <div className="flex justify-between text-gray-500 font-bold text-sm uppercase tracking-wider">
+                                    <span>{t.tax} (8%)</span>
+                                    <span className="text-[#003B4A]">{formatPrice(getCartTax())}</span>
                                 </div>
 
-                                <div className="flex justify-between text-gray-600">
-                                    <span>Delivery Fee</span>
-                                    <span className="font-semibold">
+                                <div className="flex justify-between text-gray-500 font-bold text-sm uppercase tracking-wider">
+                                    <span>{t.delivery_fee}</span>
+                                    <span>
                                         {getDeliveryFee() === 0 ? (
-                                            <span className="text-green-600">FREE</span>
+                                            <span className="text-green-600 font-black">{t.free}</span>
                                         ) : (
-                                            formatPrice(getDeliveryFee())
+                                            <span className="text-[#003B4A]">{formatPrice(getDeliveryFee())}</span>
                                         )}
                                     </span>
                                 </div>
 
                                 {getCartSubtotal() < 50 && (
-                                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                                        <p className="text-sm text-blue-800">
-                                            Add {formatPrice(50 - getCartSubtotal())} more for FREE delivery!
+                                    <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4">
+                                        <p className="text-xs text-emerald-800 font-bold text-center">
+                                            {t.add_more_for_free.replace('{{amount}}', formatPrice(50 - getCartSubtotal()))}
                                         </p>
                                     </div>
                                 )}
 
-                                <div className="border-t pt-4">
-                                    <div className="flex justify-between text-xl font-bold text-gray-800">
-                                        <span>Total</span>
-                                        <span className="text-purple-600">{formatPrice(getCartGrandTotal())}</span>
+                                <div className="border-t border-gray-100 pt-6">
+                                    <div className="flex justify-between text-2xl font-black text-[#003B4A]">
+                                        <span>{t.total}</span>
+                                        <span className="text-green-600">{formatPrice(getCartGrandTotal())}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <button
                                 onClick={handleCheckout}
-                                className="w-full btn-primary text-lg py-4"
+                                className="w-full bg-[#003B4A] text-white font-black py-5 rounded-2xl hover:bg-[#003B4A]/90 active:scale-[0.98] transition-all shadow-xl shadow-[#003B4A]/10 text-lg uppercase tracking-widest"
                             >
-                                Proceed to Checkout
+                                {t.proceed_checkout}
                             </button>
 
                             <Link
                                 href="/products"
-                                className="block text-center mt-4 text-purple-600 hover:text-purple-700 font-medium"
+                                className="block text-center mt-6 text-gray-500 hover:text-[#003B4A] font-black text-sm uppercase tracking-widest transition-colors"
                             >
-                                Continue Shopping
+                                {t.continue_shopping}
                             </Link>
                         </div>
                     </div>

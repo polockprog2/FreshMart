@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useLanguage } from '@/context/LanguageContext';
+import { translations } from '@/data/translations';
 
 /**
  * Footer Component - Jamoona Style
@@ -9,7 +11,8 @@ import { useState } from 'react';
  */
 export default function Footer() {
     const currentYear = new Date().getFullYear();
-    const [language, setLanguage] = useState('EN');
+    const { language, changeLanguage } = useLanguage();
+    const t = translations[language] || translations.EN;
     const [email, setEmail] = useState('');
 
     const handleNewsletterSubmit = (e) => {
@@ -29,8 +32,8 @@ export default function Footer() {
                             <span className="text-3xl">🛒</span>
                             <span className="text-2xl font-bold text-green-400">📦Baksho®</span>
                         </div>
-                        <p className="text-gray-400 mb-4">
-                            Germany's trusted online grocery store. Fresh, authentic products delivered to your doorstep since 2026.
+                        <p className="text-gray-400 mb-4 text-sm leading-relaxed">
+                            {t.footer_desc}
                         </p>
                         <div className="flex gap-4">
                             <a href="#" className="text-gray-400 hover:text-green-400 transition-colors" aria-label="Facebook">
@@ -53,22 +56,22 @@ export default function Footer() {
 
                     {/* About Us, Help & FAQ */}
                     <div>
-                        <h3 className="text-lg font-semibold mb-4 text-green-400">About Us, Help & FAQ</h3>
+                        <h3 className="text-lg font-semibold mb-4 text-green-400">{t.footer_help_title}</h3>
                         <ul className="space-y-2">
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Frequently Asked Questions</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Shipping Information</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
-                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Terms & Conditions</a></li>
+                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">{t.about_us}</a></li>
+                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">{t.faq}</a></li>
+                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">{t.shipping_info}</a></li>
+                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">{t.contact_us}</a></li>
+                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">{t.privacy_policy}</a></li>
+                            <li><a href="#" className="text-gray-400 hover:text-white transition-colors">{t.terms}</a></li>
                         </ul>
                     </div>
 
                     {/* Top Categories */}
                     <div>
-                        <h3 className="text-lg font-semibold mb-4 text-green-400">Top Categories</h3>
+                        <h3 className="text-lg font-semibold mb-4 text-green-400">{t.footer_categories_title}</h3>
                         <ul className="space-y-2">
-                            <li><Link href="/products?category=value-deals" className="text-gray-400 hover:text-white transition-colors">Value Deals</Link></li>
+                            <li><Link href="/products?category=value-deals" className="text-gray-400 hover:text-white transition-colors">{t.cat_value_deals.replace('!', '')}</Link></li>
                             <li><Link href="/products?category=basmati-rice" className="text-gray-400 hover:text-white transition-colors">Basmati Rice</Link></li>
                             <li><Link href="/products?category=vegetables" className="text-gray-400 hover:text-white transition-colors">Vegetables</Link></li>
                             <li><Link href="/products?category=fruits" className="text-gray-400 hover:text-white transition-colors">Fruits</Link></li>
@@ -79,9 +82,9 @@ export default function Footer() {
 
                     {/* Newsletter & Language */}
                     <div>
-                        <h3 className="text-lg font-semibold mb-4 text-green-400">Stay Connected</h3>
-                        <p className="text-gray-400 mb-4 text-sm">
-                            Subscribe to get special offers, recipes, and updates!
+                        <h3 className="text-lg font-semibold mb-4 text-green-400">{t.footer_connect_title}</h3>
+                        <p className="text-gray-400 mb-4 text-xs">
+                            {t.newsletter_desc}
                         </p>
                         <form onSubmit={handleNewsletterSubmit} className="mb-6">
                             <div className="flex gap-2">
@@ -89,9 +92,9 @@ export default function Footer() {
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="Your email"
+                                    placeholder={t.newsletter_placeholder}
                                     required
-                                    className="flex-1 px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:border-green-500 focus:outline-none"
+                                    className="flex-1 px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 text-sm focus:border-green-500 focus:outline-none"
                                 />
                                 <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
                                     →
@@ -101,24 +104,34 @@ export default function Footer() {
 
                         {/* Language Selector */}
                         <div>
-                            <p className="text-sm text-gray-400 mb-2">Language</p>
-                            <button
-                                onClick={() => setLanguage(language === 'EN' ? 'DE' : 'EN')}
-                                className="flex items-center gap-2 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
-                            >
-                                <span>🌐</span>
-                                <span className="font-medium">{language === 'EN' ? 'English' : 'Deutsch'}</span>
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
+                            <p className="text-xs text-gray-400 mb-2 uppercase tracking-widest font-black">{t.language_label}</p>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => changeLanguage('EN')}
+                                    className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border transition-all text-xs font-bold ${language === 'EN' ? 'bg-green-600 border-green-600 text-white' : 'bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700'}`}
+                                >
+                                    <span>🇬🇧</span> EN
+                                </button>
+                                <button
+                                    onClick={() => changeLanguage('BN')}
+                                    className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border transition-all text-xs font-bold ${language === 'BN' ? 'bg-green-600 border-green-600 text-white' : 'bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700'}`}
+                                >
+                                    <span>🇧🇩</span> বাংলা
+                                </button>
+                                <button
+                                    onClick={() => changeLanguage('DE')}
+                                    className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border transition-all text-xs font-bold ${language === 'DE' ? 'bg-green-600 border-green-600 text-white' : 'bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700'}`}
+                                >
+                                    <span>🇩🇪</span> DE
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                    <p>&copy; {currentYear} 📦Baksho®. All rights reserved. | Made with ❤️ in Germany</p>
+                <div className="border-t border-gray-800 mt-8 pt-8 text-center text-xs text-gray-500">
+                    <p>&copy; {currentYear} 📦Baksho®. {t.all_rights_reserved} | {t.made_with} {t.germany}</p>
                 </div>
             </div>
         </footer>

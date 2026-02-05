@@ -22,17 +22,21 @@ export const metadata = {
   },
 };
 
+import { LanguageProvider } from "@/context/LanguageContext";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
-        <UserProvider>
-          <CartProvider>
-            <Navbar />
+        <LanguageProvider>
+          <UserProvider>
+            <CartProvider>
+              <Navbar />
               {children}
-            <Footer />
-          </CartProvider>
-        </UserProvider>
+              <Footer />
+            </CartProvider>
+          </UserProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

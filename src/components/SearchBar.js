@@ -1,9 +1,15 @@
+"use client";
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/context/LanguageContext';
+import { translations } from '@/data/translations';
 
 export default function SearchBar() {
     const [searchQuery, setSearchQuery] = useState('');
     const router = useRouter();
+    const { language } = useLanguage();
+    const t = translations[language] || translations.EN;
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -29,7 +35,7 @@ export default function SearchBar() {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Find a product..."
+                    placeholder={t.search_placeholder}
                     className="w-full pl-12 pr-6 py-3 bg-[#F1F3F4] text-gray-700 placeholder-gray-500 rounded-full focus:outline-none transition-all duration-300 text-sm md:text-base font-medium"
                 />
             </div>
