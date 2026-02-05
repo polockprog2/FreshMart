@@ -29,9 +29,7 @@ export default function RootLayout({ children }) {
         <UserProvider>
           <CartProvider>
             <Navbar />
-            <main className="min-h-screen">
               {children}
-            </main>
             <Footer />
           </CartProvider>
         </UserProvider>
