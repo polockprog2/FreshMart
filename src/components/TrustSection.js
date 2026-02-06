@@ -13,25 +13,42 @@ export default function TrustSection() {
 
     const stats = [
         {
-            icon: '❤️',
+            icon: (
+                <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            ),
             number: '130,000+',
             label: t.happy_customers,
             color: 'text-red-500'
         },
         {
-            icon: '⭐',
+            icon: (
+                <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                </svg>
+            ),
             number: '1,800+',
             label: t.positive_reviews,
             color: 'text-yellow-500'
         },
         {
-            icon: '📦',
+            icon: (
+                <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+            ),
             number: '1,500+',
             label: t.products_stock,
             color: 'text-green-500'
         },
         {
-            icon: '🚚',
+            icon: (
+                <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                </svg>
+            ),
             number: 'Free',
             label: t.free_delivery_over,
             color: 'text-blue-500'
@@ -69,7 +86,7 @@ export default function TrustSection() {
                             key={index}
                             className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition-shadow"
                         >
-                            <div className={`text-5xl mb-3 ${stat.color}`}>{stat.icon}</div>
+                            <div className={`flex justify-center mb-3 ${stat.color}`}>{stat.icon}</div>
                             <div className="text-3xl font-bold text-gray-900 mb-1">{stat.number}</div>
                             <div className="text-sm text-gray-600 font-bold">{stat.label}</div>
                         </div>
@@ -110,26 +127,6 @@ export default function TrustSection() {
                             </div>
                         </div>
                     ))}
-                </div>
-
-                {/* Trust Badges */}
-                <div className="mt-12 flex flex-wrap justify-center gap-6 items-center">
-                    <div className="flex items-center gap-2 text-gray-600">
-                        <span className="text-2xl">🔒</span>
-                        <span className="font-bold uppercase tracking-wider text-xs">{t.secure_payment}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-600">
-                        <span className="text-2xl">✓</span>
-                        <span className="font-bold uppercase tracking-wider text-xs">{t.quality_guaranteed}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-600">
-                        <span className="text-2xl">🌿</span>
-                        <span className="font-bold uppercase tracking-wider text-xs">{t.fresh_organic}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-600">
-                        <span className="text-2xl">📞</span>
-                        <span className="font-bold uppercase tracking-wider text-xs">{t.support_247}</span>
-                    </div>
                 </div>
             </div>
         </section>

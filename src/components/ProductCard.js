@@ -51,8 +51,22 @@ export default function ProductCard({ product, badgeType = null }) {
                 )}
 
                 {/* Image container with enhanced hover */}
-                <div className="w-full h-full flex items-center justify-center text-6xl group-hover:scale-125 transition-transform duration-700 relative">
-                    <span className={`drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-500 ${!product.inStock ? 'grayscale opacity-50' : ''}`}>
+                <div className="w-full h-full flex items-center justify-center group-hover:scale-110 transition-transform duration-700 relative p-4">
+                    {product.image ? (
+                        <img
+                            src={product.image}
+                            alt={product.name}
+                            className={`w-full h-full object-contain drop-shadow-xl group-hover:drop-shadow-2xl transition-all duration-500 ${!product.inStock ? 'grayscale opacity-50' : ''}`}
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.style.display = 'none';
+                                e.target.nextSibling.style.display = 'block';
+                            }}
+                        />
+                    ) : null}
+                    <span
+                        className={`text-6xl drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-500 ${product.image ? 'hidden' : 'block'} ${!product.inStock ? 'grayscale opacity-50' : ''}`}
+                    >
                         {product.category === 'vegetables' && '🥬'}
                         {product.category === 'fruits' && '🍎'}
                         {product.category === 'meat-fish' && '🥩'}

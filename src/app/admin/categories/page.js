@@ -1,176 +1,60 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useUser } from '@/context/UserContext';
+import { useState, useEffect } from 'react';
 import { categories } from '@/data/categories';
 
+/**
+ * Enterprise Category Management
+ */
 export default function AdminCategoriesPage() {
-    const router = useRouter();
-    const { isAdmin } = useUser();
     const [categoryList, setCategoryList] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [editingCategory, setEditingCategory] = useState(null);
-    const [formData, setFormData] = useState({
-        name: '',
-        slug: '',
-        icon: ''
-    });
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (!isAdmin()) {
-            router.push('/');
-            return;
-        }
-        setCategoryList(categories);
-    }, [isAdmin, router]);
-
-    const handleEdit = (category) => {
-        setEditingCategory(category);
-        setFormData({
-            name: category.name,
-            slug: category.slug,
-            icon: category.icon
-        });
-        setShowModal(true);
-    };
-
-    const handleAddNew = () => {
-        setEditingCategory(null);
-        setFormData({ name: '', slug: '', icon: '' });
-        setShowModal(true);
-    };
-
-    const handleSave = () => {
-        if (editingCategory) {
-            setCategoryList(categoryList.map(c =>
-                c.id === editingCategory.id ? { ...c, ...formData } : c
-            ));
-        } else {
-            const newCategory = {
-                id: Math.max(...categoryList.map(c => c.id), 0) + 1,
-                ...formData
-            };
-            setCategoryList([...categoryList, newCategory]);
-        }
-        setShowModal(false);
-    };
-
-    const handleDelete = (categoryId) => {
-        if (confirm('Are you sure you want to delete this category?')) {
-            setCategoryList(categoryList.filter(c => c.id !== categoryId));
-        }
-    };
-
-    if (!isAdmin()) {
-        return null;
-    }
+        // Simulate API fetch
+        const fetchCategories = async () => {
+            await new Promise(r => setTimeout(r, 400));
+            setCategoryList(categories);
+            setIsLoading(false);
+        };
+        fetchCategories();
+    }, []);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center mb-8">
-                    <div>
-                        <h1 className="text-5xl font-black text-slate-900">Category Management</h1>
-                        <p className="text-slate-600 mt-2">Manage product categories</p>
-                    </div>
-                    <button 
-                        onClick={handleAddNew}
-                        className="bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-3 px-8 rounded-xl hover:from-amber-600 hover:to-amber-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
-                    >
-                        + Add Category
-                    </button>
+        <div className="space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-black text-slate-900">Category Management</h1>
+                    <p className="text-slate-500 text-sm font-medium mt-1">Organize your products with custom categories and icons</p>
                 </div>
+                <button className="flex items-center gap-2 px-5 py-2.5 bg-[#003B4A] rounded-xl text-sm font-bold text-white hover:bg-[#002B36] transition-all shadow-md active:scale-95">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
+                    Add Category
+                </button>
+            </div>
 
-                {/* Categories Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {categoryList.map((category) => (
-                        <div key={category.id} className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition-all border-l-4 border-amber-500">
-                            <div className="flex items-start justify-between mb-4">
-                                <div className="text-5xl">{category.icon}</div>
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={() => handleEdit(category)}
-                                        className="text-blue-600 hover:text-blue-700 font-bold text-sm hover:bg-blue-50 px-3 py-1 rounded transition-colors"
-                                    >
-                                        ✏️
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(category.id)}
-                                        className="text-red-600 hover:text-red-700 font-bold text-sm hover:bg-red-50 px-3 py-1 rounded transition-colors"
-                                    >
-                                        🗑️
-                                    </button>
-                                </div>
-                            </div>
-                            <h3 className="text-2xl font-bold text-slate-900 mb-2">{category.name}</h3>
-                            <p className="text-slate-600 text-sm mb-4">Slug: <span className="font-mono bg-slate-100 px-2 py-1 rounded">{category.slug}</span></p>
-                            <p className="text-slate-600 text-sm">ID: {category.id}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {isLoading ? (
+                    [1, 2, 3, 4].map(i => (
+                        <div key={i} className="h-48 bg-white border border-slate-200 rounded-2xl animate-pulse"></div>
+                    ))
+                ) : categoryList.map((category) => (
+                    <div key={category.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button className="p-1.5 text-slate-400 hover:text-[#003B4A] transition-colors"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button>
                         </div>
-                    ))}
-                </div>
+                        <div className="w-16 h-16 bg-[#F9F7F2] rounded-2xl flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                            {category.icon}
+                        </div>
+                        <h3 className="text-lg font-black text-slate-900">{category.name}</h3>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Slug: {category.slug}</p>
 
-                {/* Modal */}
-                {showModal && (
-                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-6">
-                                {editingCategory ? 'Edit Category' : 'Add New Category'}
-                            </h2>
-
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-2">Category Name</label>
-                                    <input
-                                        type="text"
-                                        value={formData.name}
-                                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                        className="w-full px-4 py-2.5 rounded-lg border-2 border-slate-200 focus:border-amber-500 focus:outline-none"
-                                        placeholder="e.g., Vegetables"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-2">Slug</label>
-                                    <input
-                                        type="text"
-                                        value={formData.slug}
-                                        onChange={(e) => setFormData({...formData, slug: e.target.value})}
-                                        className="w-full px-4 py-2.5 rounded-lg border-2 border-slate-200 focus:border-amber-500 focus:outline-none"
-                                        placeholder="e.g., vegetables"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-2">Icon Emoji</label>
-                                    <input
-                                        type="text"
-                                        value={formData.icon}
-                                        onChange={(e) => setFormData({...formData, icon: e.target.value})}
-                                        className="w-full px-4 py-2.5 rounded-lg border-2 border-slate-200 focus:border-amber-500 focus:outline-none text-2xl"
-                                        placeholder="🥬"
-                                        maxLength="2"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="flex gap-4 mt-8">
-                                <button
-                                    onClick={() => setShowModal(false)}
-                                    className="flex-1 px-4 py-2.5 rounded-lg border-2 border-slate-300 text-slate-700 font-bold hover:bg-slate-50 transition-colors"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleSave}
-                                    className="flex-1 px-4 py-2.5 rounded-lg bg-amber-500 text-white font-bold hover:bg-amber-600 transition-colors"
-                                >
-                                    Save
-                                </button>
-                            </div>
+                        <div className="mt-6 flex items-center justify-between">
+                            <span className="text-[10px] font-black text-[#003B4A] bg-[#003B4A]/5 px-2 py-1 rounded-lg">ID: {category.id}</span>
+                            <button className="text-[10px] font-black text-red-400 hover:text-red-600 uppercase tracking-widest transition-colors">Delete</button>
                         </div>
                     </div>
-                )}
+                ))}
             </div>
         </div>
     );

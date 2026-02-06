@@ -1,142 +1,151 @@
 "use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { getDashboardStats } from '@/api/dashboard.api';
 import Link from 'next/link';
-import { useUser } from '@/context/UserContext';
-import { products } from '@/data/products';
-import { orders } from '@/data/orders';
 
+/**
+ * Enterprise Dashboard Overview
+ */
 export default function AdminDashboard() {
-    const router = useRouter();
-    const { user, isAdmin } = useUser();
+    const [stats, setStats] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (!isAdmin()) {
-            router.push('/');
-        }
-    }, [isAdmin, router]);
+        const fetchStats = async () => {
+            try {
+                const data = await getDashboardStats();
+                setStats(data);
+            } catch (error) {
+                console.error('Failed to fetch dashboard stats:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchStats();
+    }, []);
 
-    if (!user || !isAdmin()) {
-        return null;
-    }
-
-    const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
-    const stats = [
-        { label: 'Total Products', value: products.length, icon: '📦', color: 'from-blue-500 to-blue-600', href: '/admin/products' },
-        { label: 'Total Orders', value: orders.length, icon: '🛒', color: 'from-green-500 to-green-600', href: '/admin/orders' },
-        { label: 'Total Revenue', value: `$${totalRevenue.toFixed(2)}`, icon: '💰', color: 'from-purple-500 to-purple-600', href: '/admin/orders' },
-        { label: 'In Stock Items', value: products.filter(p => p.inStock).length, icon: '✅', color: 'from-emerald-500 to-emerald-600', href: '/admin/inventory' }
-    ];
-
-    const adminActions = [
-        { label: 'Manage Products', icon: '📦', desc: 'Add, edit, delete products', href: '/admin/products', color: 'from-blue-50 to-blue-100', borderColor: 'border-blue-300' },
-        { label: 'View Orders', icon: '📋', desc: 'Track and manage orders', href: '/admin/orders', color: 'from-green-50 to-green-100', borderColor: 'border-green-300' },
-        { label: 'Inventory', icon: '📊', desc: 'Monitor stock levels', href: '/admin/inventory', color: 'from-purple-50 to-purple-100', borderColor: 'border-purple-300' },
-        { label: 'Categories', icon: '🏷️', desc: 'Manage product categories', href: '/admin/categories', color: 'from-amber-50 to-amber-100', borderColor: 'border-amber-300' },
-        { label: 'Users', icon: '👥', desc: 'Manage user accounts', href: '/admin/users', color: 'from-pink-50 to-pink-100', borderColor: 'border-pink-300' },
-        { label: 'Settings', icon: '⚙️', desc: 'Website configuration', href: '/admin/settings', color: 'from-slate-50 to-slate-100', borderColor: 'border-slate-300' }
-    ];
-
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                {/* Header */}
-                <div className="mb-10">
-                    <h1 className="text-5xl font-black text-slate-900 mb-2">Admin Dashboard</h1>
-                    <p className="text-lg text-slate-600">Welcome back, <span className="font-bold text-slate-900">{user.firstName}</span>! Here's your control center.</p>
-                </div>
-
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                    {stats.map((stat, index) => (
-                        <Link key={index} href={stat.href} className="group">
-                            <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border-2 border-transparent hover:border-slate-200">
-                                <div className={`w-14 h-14 bg-gradient-to-r ${stat.color} rounded-xl flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform`}>
-                                    {stat.icon}
-                                </div>
-                                <p className="text-slate-600 text-sm font-medium mb-1">{stat.label}</p>
-                                <p className="text-4xl font-black text-slate-900">{stat.value}</p>
-                            </div>
-                        </Link>
+    if (isLoading) {
+        return (
+            <div className="space-y-8 animate-pulse">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {[1, 2, 3, 4].map(i => (
+                        <div key={i} className="h-32 bg-white rounded-2xl border border-slate-200"></div>
                     ))}
                 </div>
+                <div className="h-96 bg-white rounded-2xl border border-slate-200"></div>
+            </div>
+        );
+    }
 
-                {/* Quick Actions Grid */}
-                <div className="mb-10">
-                    <h2 className="text-3xl font-bold text-slate-900 mb-6">Quick Actions</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {adminActions.map((action, index) => (
-                            <Link key={index} href={action.href}>
-                                <div className={`bg-gradient-to-br ${action.color} rounded-2xl p-6 border-2 ${action.borderColor} hover:shadow-lg transition-all duration-300 transform hover:scale-105 cursor-pointer group`}>
-                                    <div className="text-5xl mb-4 group-hover:scale-125 transition-transform">{action.icon}</div>
-                                    <h3 className="text-xl font-bold text-slate-900 mb-2">{action.label}</h3>
-                                    <p className="text-slate-700 text-sm">{action.desc}</p>
-                                    <div className="mt-4 text-slate-600 group-hover:text-slate-900 transition-colors font-semibold">
-                                        Go to {action.label} →
+    return (
+        <div className="space-y-8">
+            {/* Header Area */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-black text-slate-900">Dashboard Overview</h1>
+                    <p className="text-slate-500 text-sm font-medium mt-1">Welcome back! Here's what's happening with your store today.</p>
+                </div>
+                <div className="flex items-center gap-3">
+                    <button className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm">
+                        Export Report
+                    </button>
+                    <button className="px-4 py-2 bg-[#003B4A] rounded-xl text-sm font-bold text-white hover:bg-[#002B36] transition-colors shadow-sm">
+                        Create New Listing
+                    </button>
+                </div>
+            </div>
+
+            {/* KPI Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {stats?.kpis.map((kpi) => (
+                    <div key={kpi.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow group">
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-900 group-hover:bg-[#003B4A] group-hover:text-white transition-colors">
+                                {kpi.icon === 'shopping-bag' && (
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                                )}
+                                {kpi.icon === 'euro' && (
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3 1.343 3 3-1.343 3-3 3m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                )}
+                                {kpi.icon === 'users' && (
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                )}
+                                {kpi.icon === 'alert-triangle' && (
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 17c-.77 1.333.192 3 1.732 3z" /></svg>
+                                )}
+                            </div>
+                            <span className={`text-xs font-black px-2 py-1 rounded-full ${kpi.trend.startsWith('+') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                {kpi.trend}
+                            </span>
+                        </div>
+                        <p className="text-slate-500 text-xs font-black uppercase tracking-wider">{kpi.label}</p>
+                        <h3 className="text-3xl font-black text-slate-900 mt-1">{kpi.value}</h3>
+                    </div>
+                ))}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Sales Chart Placeholder */}
+                <div className="lg:col-span-2 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                    <div className="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 className="text-lg font-black text-slate-900">Revenue Analytics</h3>
+                            <p className="text-slate-500 text-xs font-medium">Monthly sales performance and trends</p>
+                        </div>
+                        <select className="bg-slate-50 border border-slate-200 text-xs font-bold rounded-lg px-3 py-1.5 focus:outline-none">
+                            <option>Last 7 Days</option>
+                            <option>Last 30 Days</option>
+                            <option>This Year</option>
+                        </select>
+                    </div>
+
+                    {/* Visual Chart Placeholder */}
+                    <div className="h-64 flex items-end gap-2 px-2">
+                        {stats?.salesData.map((data, i) => (
+                            <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
+                                <div
+                                    className="w-full bg-slate-100 group-hover:bg-[#003B4A] transition-all duration-300 rounded-t-lg relative"
+                                    style={{ height: `${(data.sales / 4000) * 100}%` }}
+                                >
+                                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                                        €{data.sales}
                                     </div>
                                 </div>
-                            </Link>
+                                <span className="text-[10px] font-bold text-slate-400 uppercase">{data.name}</span>
+                            </div>
                         ))}
-                    </div>
-                </div>
-
-                {/* Key Metrics */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
-                    <div className="bg-white rounded-2xl shadow-md p-8 border-l-4 border-blue-500">
-                        <h3 className="text-2xl font-bold text-slate-900 mb-6">📈 Quick Stats</h3>
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-center pb-4 border-b border-slate-200">
-                                <span className="text-slate-700 font-medium">Out of Stock Items</span>
-                                <span className="text-2xl font-bold text-red-600">{products.filter(p => !p.inStock).length}</span>
-                            </div>
-                            <div className="flex justify-between items-center pb-4 border-b border-slate-200">
-                                <span className="text-slate-700 font-medium">Pending Orders</span>
-                                <span className="text-2xl font-bold text-amber-600">{orders.filter(o => o.status === 'processing').length}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-slate-700 font-medium">Avg Order Value</span>
-                                <span className="text-2xl font-bold text-green-600">${(totalRevenue / orders.length).toFixed(2)}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white rounded-2xl shadow-md p-8 border-l-4 border-purple-500">
-                        <h3 className="text-2xl font-bold text-slate-900 mb-6">🎯 Top Categories</h3>
-                        <div className="space-y-4">
-                            {['vegetables', 'fruits', 'dairy'].map((cat, idx) => {
-                                const count = products.filter(p => p.category === cat).length;
-                                return (
-                                    <div key={idx} className="flex justify-between items-center pb-4 border-b border-slate-200">
-                                        <span className="text-slate-700 font-medium capitalize">{cat}</span>
-                                        <span className="text-2xl font-bold text-purple-600">{count}</span>
-                                    </div>
-                                );
-                            })}
-                        </div>
                     </div>
                 </div>
 
                 {/* Recent Activity */}
-                <div className="bg-white rounded-2xl shadow-md p-8">
-                    <h2 className="text-2xl font-bold text-slate-900 mb-6">📋 Recent Activity</h2>
-                    <div className="space-y-4">
-                        {orders.slice(0, 3).map((order, idx) => (
-                            <div key={idx} className="flex items-center gap-4 p-4 bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl hover:shadow-md transition-shadow">
-                                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-xl font-bold text-blue-600">
-                                    {idx + 1}
+                <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 className="text-lg font-black text-slate-900 mb-6">Recent Orders</h3>
+                    <div className="space-y-6">
+                        {stats?.recentOrders.map((order) => (
+                            <div key={order.id} className="flex items-center gap-4">
+                                <div className="w-10 h-10 bg-[#F9F7F2] rounded-xl flex items-center justify-center text-sm font-black text-[#003B4A]">
+                                    #{order.id.split('-')[1]}
                                 </div>
-                                <div className="flex-1">
-                                    <p className="font-bold text-slate-900">{order.id}</p>
-                                    <p className="text-sm text-slate-600">Status: <span className="font-semibold capitalize">{order.status}</span></p>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-xs font-black text-slate-900 truncate">€{order.total.toFixed(2)}</p>
+                                    <p className="text-[10px] font-medium text-slate-500 truncate">{order.items.length} items • {order.status}</p>
                                 </div>
-                                <div className="text-right">
-                                    <p className="font-bold text-slate-900">${order.total.toFixed(2)}</p>
-                                    <p className="text-sm text-slate-600">{order.items.length} items</p>
-                                </div>
+                                <Link
+                                    href={`/admin/orders/${order.id}`}
+                                    className="p-2 text-slate-400 hover:text-[#003B4A] hover:bg-slate-50 rounded-lg transition-all"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                                </Link>
                             </div>
                         ))}
                     </div>
+                    <Link
+                        href="/admin/orders"
+                        className="block text-center text-xs font-black text-[#003B4A] mt-8 hover:underline uppercase tracking-wider"
+                    >
+                        View All Orders →
+                    </Link>
                 </div>
             </div>
         </div>

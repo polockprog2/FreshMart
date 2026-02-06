@@ -1,198 +1,135 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useUser } from '@/context/UserContext';
+import { useState } from 'react';
 
+/**
+ * Enterprise Settings Module
+ */
 export default function AdminSettingsPage() {
-    const router = useRouter();
-    const { isAdmin } = useUser();
     const [settings, setSettings] = useState({
-        siteName: 'FreshMart',
-        siteDescription: 'Fresh groceries delivered to your door',
-        freeDeliveryThreshold: 50,
-        deliveryTime: '24 hours',
-        supportEmail: 'support@freshmart.com',
-        supportPhone: '+1 (555) 123-4567',
-        maintenanceMode: false,
-        allowNewRegistrations: true,
-        maxOrderValue: 1000
+        siteName: 'Baksho',
+        supportEmail: 'support@baksho.com',
+        freeDelivery: 50,
+        taxRate: 19, // DE Standard MwSt
+        currency: 'EUR',
+        maintenance: false
     });
-    const [saved, setSaved] = useState(false);
 
-    useEffect(() => {
-        if (!isAdmin()) {
-            router.push('/');
-        }
-    }, [isAdmin, router]);
-
-    const handleChange = (field, value) => {
-        setSettings({...settings, [field]: value});
-        setSaved(false);
-    };
+    const [isSaving, setIsSaving] = useState(false);
 
     const handleSave = () => {
-        setSaved(true);
-        setTimeout(() => setSaved(false), 3000);
+        setIsSaving(true);
+        setTimeout(() => setIsSaving(false), 1000);
     };
 
-    if (!isAdmin()) {
-        return null;
-    }
-
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="mb-8">
-                    <h1 className="text-5xl font-black text-slate-900">Website Settings</h1>
-                    <p className="text-slate-600 mt-2">Configure your website and business settings</p>
+        <div className="max-w-4xl space-y-8">
+            <div>
+                <h1 className="text-2xl font-black text-slate-900">System Settings</h1>
+                <p className="text-slate-500 text-sm font-medium mt-1">Configure global store parameters and business rules</p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-8">
+                {/* Store Config */}
+                <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                        <svg className="w-5 h-5 text-[#003B4A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        General Configuration
+                    </h3>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label className="block text-xs font-black text-slate-500 uppercase mb-2">Store Name</label>
+                            <input
+                                type="text"
+                                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none"
+                                value={settings.siteName}
+                                onChange={e => setSettings(s => ({ ...s, siteName: e.target.value }))}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-black text-slate-500 uppercase mb-2">Support Email</label>
+                            <input
+                                type="email"
+                                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none"
+                                value={settings.supportEmail}
+                                onChange={e => setSettings(s => ({ ...s, supportEmail: e.target.value }))}
+                            />
+                        </div>
+                    </div>
                 </div>
 
-                {saved && (
-                    <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg font-bold">
-                        ✓ Settings saved successfully!
-                    </div>
-                )}
+                {/* Business Rules */}
+                <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                        <svg className="w-5 h-5 text-[#003B4A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                        Thresholds & Taxes
+                    </h3>
 
-                <div className="space-y-8">
-                    {/* General Settings */}
-                    <div className="bg-white rounded-2xl shadow-md p-8 border-l-4 border-blue-500">
-                        <h2 className="text-2xl font-bold text-slate-900 mb-6">🌐 General Settings</h2>
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2">Site Name</label>
-                                <input
-                                    type="text"
-                                    value={settings.siteName}
-                                    onChange={(e) => handleChange('siteName', e.target.value)}
-                                    className="w-full px-4 py-2.5 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:outline-none"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2">Site Description</label>
-                                <textarea
-                                    value={settings.siteDescription}
-                                    onChange={(e) => handleChange('siteDescription', e.target.value)}
-                                    className="w-full px-4 py-2.5 rounded-lg border-2 border-slate-200 focus:border-blue-500 focus:outline-none"
-                                    rows="3"
-                                />
-                            </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label className="block text-xs font-black text-slate-500 uppercase mb-2">Free Delivery (€)</label>
+                            <input
+                                type="number"
+                                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm"
+                                value={settings.freeDelivery}
+                                onChange={e => setSettings(s => ({ ...s, freeDelivery: parseFloat(e.target.value) }))}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-black text-slate-500 uppercase mb-2">Default Tax (%)</label>
+                            <input
+                                type="number"
+                                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm"
+                                value={settings.taxRate}
+                                onChange={e => setSettings(s => ({ ...s, taxRate: parseFloat(e.target.value) }))}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-black text-slate-500 uppercase mb-2">Currency</label>
+                            <select
+                                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none"
+                                value={settings.currency}
+                                onChange={e => setSettings(s => ({ ...s, currency: e.target.value }))}
+                            >
+                                <option value="EUR">EUR (€)</option>
+                                <option value="USD">USD ($)</option>
+                                <option value="BDT">BDT (৳)</option>
+                            </select>
                         </div>
                     </div>
+                </div>
 
-                    {/* Delivery Settings */}
-                    <div className="bg-white rounded-2xl shadow-md p-8 border-l-4 border-green-500">
-                        <h2 className="text-2xl font-bold text-slate-900 mb-6">🚚 Delivery Settings</h2>
-                        <div className="space-y-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-2">Free Delivery Threshold (€)</label>
-                                    <input
-                                        type="number"
-                                        value={settings.freeDeliveryThreshold}
-                                        onChange={(e) => handleChange('freeDeliveryThreshold', parseFloat(e.target.value))}
-                                        className="w-full px-4 py-2.5 rounded-lg border-2 border-slate-200 focus:border-green-500 focus:outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-bold text-slate-700 mb-2">Delivery Time</label>
-                                    <input
-                                        type="text"
-                                        value={settings.deliveryTime}
-                                        onChange={(e) => handleChange('deliveryTime', e.target.value)}
-                                        className="w-full px-4 py-2.5 rounded-lg border-2 border-slate-200 focus:border-green-500 focus:outline-none"
-                                    />
-                                </div>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2">Max Order Value (€)</label>
-                                <input
-                                    type="number"
-                                    value={settings.maxOrderValue}
-                                    onChange={(e) => handleChange('maxOrderValue', parseFloat(e.target.value))}
-                                    className="w-full px-4 py-2.5 rounded-lg border-2 border-slate-200 focus:border-green-500 focus:outline-none"
-                                />
-                            </div>
+                {/* Safety */}
+                <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                        <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 17c-.77 1.333.192 3 1.732 3z" /></svg>
+                        Danger Zone
+                    </h3>
+
+                    <div className="flex items-center justify-between p-4 bg-red-50 rounded-xl border border-red-100">
+                        <div>
+                            <p className="text-sm font-black text-red-900">Maintenance Mode</p>
+                            <p className="text-[10px] text-red-700 font-bold uppercase tracking-wider">Site will only be accessible to Admins</p>
                         </div>
-                    </div>
-
-                    {/* Contact Settings */}
-                    <div className="bg-white rounded-2xl shadow-md p-8 border-l-4 border-purple-500">
-                        <h2 className="text-2xl font-bold text-slate-900 mb-6">📞 Contact Settings</h2>
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2">Support Email</label>
-                                <input
-                                    type="email"
-                                    value={settings.supportEmail}
-                                    onChange={(e) => handleChange('supportEmail', e.target.value)}
-                                    className="w-full px-4 py-2.5 rounded-lg border-2 border-slate-200 focus:border-purple-500 focus:outline-none"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-bold text-slate-700 mb-2">Support Phone</label>
-                                <input
-                                    type="tel"
-                                    value={settings.supportPhone}
-                                    onChange={(e) => handleChange('supportPhone', e.target.value)}
-                                    className="w-full px-4 py-2.5 rounded-lg border-2 border-slate-200 focus:border-purple-500 focus:outline-none"
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* System Settings */}
-                    <div className="bg-white rounded-2xl shadow-md p-8 border-l-4 border-amber-500">
-                        <h2 className="text-2xl font-bold text-slate-900 mb-6">⚙️ System Settings</h2>
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
-                                <div>
-                                    <p className="font-bold text-slate-900">Maintenance Mode</p>
-                                    <p className="text-sm text-slate-600">Disable access for all users except admins</p>
-                                </div>
-                                <label className="flex items-center cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        checked={settings.maintenanceMode}
-                                        onChange={(e) => handleChange('maintenanceMode', e.target.checked)}
-                                        className="w-6 h-6 rounded accent-amber-500"
-                                    />
-                                </label>
-                            </div>
-
-                            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
-                                <div>
-                                    <p className="font-bold text-slate-900">Allow New Registrations</p>
-                                    <p className="text-sm text-slate-600">Allow users to create new accounts</p>
-                                </div>
-                                <label className="flex items-center cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        checked={settings.allowNewRegistrations}
-                                        onChange={(e) => handleChange('allowNewRegistrations', e.target.checked)}
-                                        className="w-6 h-6 rounded accent-amber-500"
-                                    />
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Save Button */}
-                    <div className="flex gap-4">
                         <button
-                            onClick={handleSave}
-                            className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold py-3 px-8 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl"
+                            onClick={() => setSettings(s => ({ ...s, maintenance: !s.maintenance }))}
+                            className={`px-4 py-2 rounded-lg text-xs font-black transition-all ${settings.maintenance ? 'bg-red-600 text-white' : 'bg-white border border-red-200 text-red-600'}`}
                         >
-                            💾 Save Settings
-                        </button>
-                        <button
-                            onClick={() => router.push('/admin')}
-                            className="flex-1 bg-slate-300 text-slate-900 font-bold py-3 px-8 rounded-xl hover:bg-slate-400 transition-all"
-                        >
-                            ← Back to Dashboard
+                            {settings.maintenance ? 'DISABLE' : 'ENABLE'}
                         </button>
                     </div>
                 </div>
+            </div>
+
+            <div className="pt-6 border-t border-slate-200 flex justify-end">
+                <button
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="px-8 py-3 bg-[#003B4A] text-white rounded-xl text-sm font-black hover:bg-[#002B36] transition-all shadow-lg active:scale-95 disabled:opacity-50"
+                >
+                    {isSaving ? 'Saving Changes...' : 'Save Global Settings'}
+                </button>
             </div>
         </div>
     );

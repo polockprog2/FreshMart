@@ -11,12 +11,12 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "FreshMart - Your Online Grocery Store",
+  title: "Baksho - Your Online Grocery Store",
   description: "Shop fresh groceries online. Vegetables, fruits, meat, dairy, and household essentials delivered to your doorstep. Best prices guaranteed!",
   keywords: "grocery, online shopping, fresh vegetables, fruits, meat, dairy, household essentials",
-  authors: [{ name: "FreshMart" }],
+  authors: [{ name: "Baksho" }],
   openGraph: {
-    title: "FreshMart - Your Online Grocery Store",
+    title: "Baksho - Your Online Grocery Store",
     description: "Shop fresh groceries online with fast delivery",
     type: "website",
   },
@@ -27,7 +27,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased`} suppressHydrationWarning>
         <LanguageProvider>
           <UserProvider>
             <CartProvider>

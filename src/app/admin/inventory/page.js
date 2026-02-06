@@ -1,172 +1,115 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useUser } from '@/context/UserContext';
-import { products } from '@/data/products';
+import { useState, useEffect } from 'react';
+import { getProducts } from '@/api/product.api';
 
+/**
+ * Enterprise Inventory Module
+ */
 export default function AdminInventoryPage() {
-    const router = useRouter();
-    const { isAdmin } = useUser();
-    const [searchQuery, setSearchQuery] = useState('');
+    const [inventory, setInventory] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (!isAdmin()) {
-            router.push('/');
-        }
-    }, [isAdmin, router]);
+        const fetchInventory = async () => {
+            try {
+                const response = await getProducts({ limit: 100 });
+                setInventory(response.data);
+            } catch (error) {
+                console.error('Inventory fetch failed');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchInventory();
+    }, []);
 
-    if (!isAdmin()) {
-        return null;
-    }
-
-    // Group products by category
-    const categorizedProducts = products.reduce((acc, product) => {
-        if (!acc[product.category]) {
-            acc[product.category] = [];
-        }
-        acc[product.category].push(product);
-        return acc;
-    }, {});
-
-    const categoryNames = {
-        'vegetables': 'Vegetables',
-        'fruits': 'Fruits',
-        'meat-fish': 'Meat & Fish',
-        'dairy': 'Dairy',
-        'packaged-food': 'Packaged Food',
-        'household': 'Household'
-    };
-
-    const categoryIcons = {
-        'vegetables': '🥬',
-        'fruits': '🍎',
-        'meat-fish': '🥩',
-        'dairy': '🥛',
-        'packaged-food': '🍝',
-        'household': '🧹'
-    };
-
-    const categoryColors = {
-        'vegetables': 'from-green-500 to-green-600',
-        'fruits': 'from-red-500 to-red-600',
-        'meat-fish': 'from-orange-500 to-orange-600',
-        'dairy': 'from-blue-500 to-blue-600',
-        'packaged-food': 'from-amber-500 to-amber-600',
-        'household': 'from-purple-500 to-purple-600'
-    };
-
-    const totalProducts = products.length;
-    const inStockTotal = products.filter(p => p.inStock).length;
-    const outOfStockTotal = products.filter(p => !p.inStock).length;
+    const lowStockThreshold = 10;
+    const lowStockItems = inventory.filter(item => (item.stock || 0) < lowStockThreshold);
+    const outOfStockItems = inventory.filter(item => !item.inStock);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="mb-8">
-                    <h1 className="text-5xl font-black text-slate-900">Inventory Status</h1>
-                    <p className="text-slate-600 mt-2">Monitor stock levels across all categories</p>
+        <div className="space-y-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-black text-slate-900">Inventory Management</h1>
+                    <p className="text-slate-500 text-sm font-medium mt-1">Real-time stock monitoring and replenishment</p>
                 </div>
+                <div className="flex items-center gap-3">
+                    <button className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm">
+                        Download Report
+                    </button>
+                    <button className="px-4 py-2 bg-[#003B4A] rounded-xl text-sm font-bold text-white hover:bg-[#002B36] transition-colors shadow-sm">
+                        Restock All Low Items
+                    </button>
+                </div>
+            </div>
 
-                {/* Summary Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                    <div className="bg-white rounded-2xl shadow-md p-8 border-l-4 border-blue-500 hover:shadow-lg transition-all">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-slate-600 mb-2 font-medium">Total Products</p>
-                                <p className="text-5xl font-black text-blue-600">{totalProducts}</p>
-                            </div>
-                            <div className="text-6xl">📦</div>
+            {/* Alerts */}
+            {(lowStockItems.length > 0 || outOfStockItems.length > 0) && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-red-50 border border-red-200 p-6 rounded-2xl flex items-center gap-4">
+                        <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-red-600">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 17c-.77 1.333.192 3 1.732 3z" /></svg>
+                        </div>
+                        <div>
+                            <p className="text-sm font-black text-red-900 leading-none">{outOfStockItems.length} Critical Stockouts</p>
+                            <p className="text-xs font-bold text-red-700 mt-1 uppercase tracking-wider">Immediate action required</p>
                         </div>
                     </div>
-
-                    <div className="bg-white rounded-2xl shadow-md p-8 border-l-4 border-green-500 hover:shadow-lg transition-all">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-slate-600 mb-2 font-medium">In Stock</p>
-                                <p className="text-5xl font-black text-green-600">{inStockTotal}</p>
-                                <p className="text-sm text-slate-600 mt-2">{((inStockTotal/totalProducts)*100).toFixed(0)}% availability</p>
-                            </div>
-                            <div className="text-6xl">✅</div>
+                    <div className="bg-amber-50 border border-amber-200 p-6 rounded-2xl flex items-center gap-4">
+                        <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
-                    </div>
-
-                    <div className="bg-white rounded-2xl shadow-md p-8 border-l-4 border-red-500 hover:shadow-lg transition-all">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-slate-600 mb-2 font-medium">Out of Stock</p>
-                                <p className="text-5xl font-black text-red-600">{outOfStockTotal}</p>
-                                <p className="text-sm text-slate-600 mt-2">Need attention</p>
-                            </div>
-                            <div className="text-6xl">⚠️</div>
+                        <div>
+                            <p className="text-sm font-black text-amber-900 leading-none">{lowStockItems.length} Low Stock Warnings</p>
+                            <p className="text-xs font-bold text-amber-700 mt-1 uppercase tracking-wider">Threshold: Under {lowStockThreshold} units</p>
                         </div>
                     </div>
                 </div>
+            )}
 
-                {/* Category Breakdown */}
-                <div className="space-y-6">
-                    {Object.entries(categorizedProducts).map(([category, categoryProducts]) => {
-                        const inStock = categoryProducts.filter(p => p.inStock).length;
-                        const outOfStock = categoryProducts.filter(p => !p.inStock).length;
-                        const stockPercentage = (inStock / categoryProducts.length) * 100;
-
-                        return (
-                            <div key={category} className="bg-white rounded-2xl shadow-md p-8 hover:shadow-lg transition-all border-l-4 border-slate-300">
-                                <div className="flex items-center justify-between mb-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className={`w-16 h-16 bg-gradient-to-r ${categoryColors[category]} rounded-xl flex items-center justify-center text-4xl`}>
-                                            {categoryIcons[category]}
+            {/* Inventory Table */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-slate-50 border-b border-slate-200">
+                                <th className="px-6 py-4 text-xs font-black text-slate-500 uppercase tracking-widest">Item Detail</th>
+                                <th className="px-6 py-4 text-xs font-black text-slate-500 uppercase tracking-widest">On Hand</th>
+                                <th className="px-6 py-4 text-xs font-black text-slate-500 uppercase tracking-widest">Status</th>
+                                <th className="px-6 py-4 text-xs font-black text-slate-500 uppercase tracking-widest text-right">Quick Adjust</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {isLoading ? (
+                                <tr className="animate-pulse h-20"><td colSpan="4"></td></tr>
+                            ) : inventory.map((item) => (
+                                <tr key={item.id} className="hover:bg-slate-50 transition-colors">
+                                    <td className="px-6 py-4">
+                                        <p className="text-sm font-black text-slate-900">{item.name}</p>
+                                        <p className="text-[10px] text-slate-400 font-bold uppercase">{item.category} • {item.unit}</p>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={`text-sm font-black ${item.stock < lowStockThreshold ? 'text-red-600' : 'text-slate-900'}`}>
+                                            {item.stock || 0} units
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ${item.inStock ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                            {item.inStock ? 'Available' : 'Out of Stock'}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
+                                        <div className="flex items-center justify-end gap-2">
+                                            <button className="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 hover:bg-[#003B4A] hover:text-white transition-all font-black">-</button>
+                                            <button className="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 hover:bg-[#003B4A] hover:text-white transition-all font-black">+</button>
                                         </div>
-                                        <div>
-                                            <h3 className="text-2xl font-bold text-slate-900">{categoryNames[category]}</h3>
-                                            <p className="text-sm text-slate-600">{categoryProducts.length} products</p>
-                                        </div>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-sm text-slate-600 font-medium">Stock Level</p>
-                                        <p className="text-4xl font-black text-slate-900">{stockPercentage.toFixed(0)}%</p>
-                                    </div>
-                                </div>
-
-                                {/* Progress Bar */}
-                                <div className="mb-6">
-                                    <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden">
-                                        <div
-                                            className={`bg-gradient-to-r ${categoryColors[category]} h-4 rounded-full transition-all duration-500`}
-                                            style={{ width: `${stockPercentage}%` }}
-                                        ></div>
-                                    </div>
-                                </div>
-
-                                {/* Stats */}
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="bg-green-50 rounded-xl p-4 border-2 border-green-200">
-                                        <p className="text-sm text-slate-600 mb-1 font-medium">In Stock</p>
-                                        <p className="text-3xl font-black text-green-600">{inStock}</p>
-                                    </div>
-                                    <div className="bg-red-50 rounded-xl p-4 border-2 border-red-200">
-                                        <p className="text-sm text-slate-600 mb-1 font-medium">Out of Stock</p>
-                                        <p className="text-3xl font-black text-red-600">{outOfStock}</p>
-                                    </div>
-                                </div>
-
-                                {/* Product List */}
-                                <div className="mt-6 pt-6 border-t-2 border-slate-200">
-                                    <p className="text-sm font-bold text-slate-700 mb-3">Products:</p>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                        {categoryProducts.map(product => (
-                                            <div key={product.id} className={`flex items-center justify-between p-3 rounded-lg text-sm ${product.inStock ? 'bg-green-50' : 'bg-red-50'}`}>
-                                                <span className="font-medium text-slate-900">{product.name}</span>
-                                                <span className={`px-2 py-1 rounded text-xs font-bold ${product.inStock ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
-                                                    {product.inStock ? '✓' : '✗'}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    })}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

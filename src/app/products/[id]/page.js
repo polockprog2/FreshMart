@@ -84,13 +84,27 @@ export default function ProductDetailPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
                         {/* Product Image Section */}
                         <div className="relative group">
-                            <div className="aspect-square bg-[#F9F7F2] rounded-[2.5rem] flex items-center justify-center text-[12rem] shadow-inner transition-transform duration-500 group-hover:scale-105">
-                                {product.category === 'vegetables' && '🥬'}
-                                {product.category === 'fruits' && '🍎'}
-                                {product.category === 'meat-fish' && '🥩'}
-                                {product.category === 'dairy' && '🥛'}
-                                {product.category === 'packaged-food' && '🍝'}
-                                {product.category === 'household' && '🧹'}
+                            <div className="aspect-square bg-[#F9F7F2] rounded-[2.5rem] flex items-center justify-center shadow-inner transition-transform duration-500 group-hover:scale-105 overflow-hidden p-8">
+                                {product.image ? (
+                                    <img
+                                        src={product.image}
+                                        alt={product.name}
+                                        className="w-full h-full object-contain drop-shadow-2xl"
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.style.display = 'none';
+                                            e.target.nextSibling.style.display = 'block';
+                                        }}
+                                    />
+                                ) : null}
+                                <div className={`text-[12rem] ${product.image ? 'hidden' : 'block'}`}>
+                                    {product.category === 'vegetables' && '🥬'}
+                                    {product.category === 'fruits' && '🍎'}
+                                    {product.category === 'meat-fish' && '🥩'}
+                                    {product.category === 'dairy' && '🥛'}
+                                    {product.category === 'packaged-food' && '🍝'}
+                                    {product.category === 'household' && '🧹'}
+                                </div>
                             </div>
 
                             {product.discount > 0 && (

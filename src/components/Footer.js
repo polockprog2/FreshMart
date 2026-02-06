@@ -29,8 +29,8 @@ export default function Footer() {
                     {/* Company Info */}
                     <div>
                         <div className="flex items-center gap-2 mb-4">
-                            <span className="text-3xl">🛒</span>
-                            <span className="text-2xl font-bold text-green-400">📦Baksho®</span>
+                            <span className="text-3xl">📦</span>
+                            <span className="text-2xl font-bold text-green-400">Baksho®</span>
                         </div>
                         <p className="text-gray-400 mb-4 text-sm leading-relaxed">
                             {t.footer_desc}

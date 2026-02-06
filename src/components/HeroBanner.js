@@ -5,7 +5,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import { translations } from '@/data/translations';
 
 /**
- * HeroBanner Component - Jamoona Style
+ * HeroBanner Component - Baksho Style
  * Large hero banner with featured product/sale and CTA button
  */
 export default function HeroBanner() {
@@ -13,7 +13,7 @@ export default function HeroBanner() {
     const t = translations[language] || translations.EN;
 
     return (
-        <section className="relative bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-blue-50 via-gold-50 to-teal-50 overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-32">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     {/* Left Content */}
@@ -39,31 +39,42 @@ export default function HeroBanner() {
                     </div>
 
                     {/* Right Image/Illustration */}
-                    <div className="relative hidden lg:block animate-fade-in-down" style={{ animationDelay: '200ms' }}>
-                        <div className="relative w-full h-80 bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-2xl overflow-hidden border-2 border-green-100 group hover:shadow-3xl transition-all duration-500">
-                            {/* Animated background gradient */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-green-100 via-emerald-100 to-teal-100 group-hover:from-green-200 group-hover:via-emerald-200 group-hover:to-teal-200 transition-all duration-700"></div>
+                    <div className="relative right-[-100] hidden lg:block animate-fade-in-down" style={{ animationDelay: '200ms' }}>
+                        <div className="relative w-full h-[450px] bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-white/50 group hover:shadow-3xl transition-all duration-700">
+                            {/* Full-bleed Background Image */}
+                            <img
+                                src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800"
+                                alt="Fresh Groceries"
+                                className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2000ms]"
+                            />
 
-                            {/* Content */}
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="text-center">
-                                    <div className="text-9xl mb-4 group-hover:scale-125 transition-transform duration-500 inline-block">🛒</div>
-                                    <p className="text-3xl font-black text-green-800 mb-2">Fresh & Organic</p>
-                                    <p className="text-lg text-green-600 font-semibold">Quality Guaranteed</p>
+                            {/* Soft Bottom Gradient Overlay */}
+                            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent"></div>
+
+                            {/* Branding Text - Glassmorphic / Modern Style */}
+                            <div className="absolute bottom-8 left-8 right-8 z-10 animate-fade-in-up">
+                                <div className="backdrop-blur-md bg-white/10 p-6 rounded-2xl border border-white/20 shadow-2xl">
+                                    <h3 className="text-3xl font-black text-white mb-2 drop-shadow-lg tracking-tight">Fresh & Organic</h3>
+                                    <div className="flex items-center gap-3">
+                                        <span className="h-1 w-12 bg-green-500 rounded-full"></span>
+                                        <p className="text-sm text-green-400 font-black uppercase tracking-[0.2em] drop-shadow-md">Quality Guaranteed</p>
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Floating badges with animations */}
-                            <div className="absolute top-6 right-6 bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg animate-bounce hover:shadow-2xl transition-shadow">
-                                –30% OFF
-                            </div>
-                            <div className="absolute bottom-6 left-6 bg-gradient-to-r from-amber-500 to-amber-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-2xl transition-shadow transform hover:scale-110 duration-300">
-                                Value Deals
+                            {/* Refined Floating Badge */}
+                            <div className="absolute top-8 right-8 z-20">
+                                <div className="bg-[#BF4136] text-white px-8 py-3 rounded-2xl font-black shadow-xl -rotate-12 hover:rotate-0 transition-transform duration-500 cursor-pointer">
+                                    –30% OFF
+                                </div>
                             </div>
 
-                            {/* Decorative floating elements */}
-                            <div className="absolute top-1/4 left-1/4 w-20 h-20 bg-white/30 rounded-full blur-xl animate-pulse"></div>
-                            <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-white/20 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+                            {/* Subtitle Badge */}
+                            <div className="absolute top-8 left-8 z-20">
+                                <div className="backdrop-blur-md bg-black/30 text-white px-4 py-2 rounded-xl font-bold text-xs border border-white/20 uppercase tracking-widest">
+                                    Premium Selection
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -21,14 +21,28 @@ export default function CartItem({ item }) {
     return (
         <div className="flex gap-6 p-5 bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.02)] border border-gray-100 hover:shadow-xl transition-all duration-300">
             {/* Product Image */}
-            <div className="w-24 h-24 bg-[#F9F7F2] rounded-2xl flex items-center justify-center text-5xl flex-shrink-0 shadow-inner">
-                {item.category === 'vegetables' && '🥬'}
-                {item.category === 'fruits' && '🍎'}
-                {item.category === 'meat-fish' && '🥩'}
-                {item.category === 'dairy' && '🥛'}
-                {item.category === 'packaged-food' && '🍝'}
-                {item.category === 'household' && '🧹'}
-                {!['vegetables', 'fruits', 'meat-fish', 'dairy', 'packaged-food', 'household'].includes(item.category) && '🛒'}
+            <div className="w-24 h-24 bg-[#F9F7F2] rounded-2xl flex items-center justify-center flex-shrink-0 shadow-inner overflow-hidden p-2">
+                {item.image ? (
+                    <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-contain drop-shadow-lg"
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'block';
+                        }}
+                    />
+                ) : null}
+                <div className={`text-4xl ${item.image ? 'hidden' : 'block'}`}>
+                    {item.category === 'vegetables' && '🥬'}
+                    {item.category === 'fruits' && '🍎'}
+                    {item.category === 'meat-fish' && '🥩'}
+                    {item.category === 'dairy' && '🥛'}
+                    {item.category === 'packaged-food' && '🍝'}
+                    {item.category === 'household' && '🧹'}
+                    {!['vegetables', 'fruits', 'meat-fish', 'dairy', 'packaged-food', 'household'].includes(item.category) && '🛒'}
+                </div>
             </div>
 
             {/* Product Info */}

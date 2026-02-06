@@ -12,7 +12,7 @@ export const products = [
         discount: 25,
         rating: 4.5,
         reviews: 128,
-        image: "/images/products/tomatoes.jpg",
+        image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=400",
         description: "Fresh, ripe tomatoes perfect for salads and cooking. Locally sourced and organic.",
         inStock: true,
         unit: "per lb"
@@ -26,7 +26,7 @@ export const products = [
         discount: 25,
         rating: 4.3,
         reviews: 95,
-        image: "/images/products/onions.jpg",
+        image: "https://images.unsplash.com/photo-1618512496248-a0778a7d3d0b?auto=format&fit=crop&q=80&w=400",
         description: "Crisp red onions with a mild, sweet flavor. Great for grilling and salads.",
         inStock: true,
         unit: "per lb"
@@ -40,7 +40,7 @@ export const products = [
         discount: 20,
         rating: 4.6,
         reviews: 203,
-        image: "/images/products/potatoes.jpg",
+        image: "https://images.unsplash.com/photo-1518977676601-b53f02bad177?auto=format&fit=crop&q=80&w=400",
         description: "Premium russet potatoes ideal for baking, mashing, and frying.",
         inStock: true,
         unit: "5 lb bag"
@@ -54,7 +54,7 @@ export const products = [
         discount: 0,
         rating: 4.7,
         reviews: 156,
-        image: "/images/products/carrots.jpg",
+        image: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&q=80&w=400",
         description: "Sweet, crunchy carrots packed with vitamins. Perfect for snacking and cooking.",
         inStock: true,
         unit: "per lb"
@@ -68,7 +68,7 @@ export const products = [
         discount: 0,
         rating: 4.4,
         reviews: 87,
-        image: "/images/products/broccoli.jpg",
+        image: "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?auto=format&fit=crop&q=80&w=400",
         description: "Fresh broccoli crowns, rich in nutrients and perfect for steaming or roasting.",
         inStock: true,
         unit: "each"
@@ -82,7 +82,7 @@ export const products = [
         discount: 17,
         rating: 4.5,
         reviews: 112,
-        image: "/images/products/bell-peppers.jpg",
+        image: "https://images.unsplash.com/photo-1566385101042-1a0aa0c12e8c?auto=format&fit=crop&q=80&w=400",
         description: "Colorful mix of red, yellow, and green bell peppers. Sweet and crunchy.",
         inStock: true,
         unit: "3 pack"
@@ -96,7 +96,7 @@ export const products = [
         discount: 0,
         rating: 4.6,
         reviews: 145,
-        image: "/images/products/spinach.jpg",
+        image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&q=80&w=400",
         description: "Tender baby spinach leaves, pre-washed and ready to use.",
         inStock: true,
         unit: "10 oz bag"
@@ -110,7 +110,7 @@ export const products = [
         discount: 0,
         rating: 4.3,
         reviews: 76,
-        image: "/images/products/cucumber.jpg",
+        image: "https://images.unsplash.com/photo-1449333254714-23eeffcf6c23?auto=format&fit=crop&q=80&w=400",
         description: "Crisp, refreshing cucumbers perfect for salads and snacking.",
         inStock: true,
         unit: "each"
@@ -126,7 +126,7 @@ export const products = [
         discount: 20,
         rating: 4.7,
         reviews: 234,
-        image: "/images/products/apples.jpg",
+        image: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&q=80&w=400",
         description: "Sweet and crispy Gala apples. Perfect for snacking and baking.",
         inStock: true,
         unit: "3 lb bag"
@@ -140,7 +140,7 @@ export const products = [
         discount: 0,
         rating: 4.8,
         reviews: 456,
-        image: "/images/products/bananas.jpg",
+        image: "https://images.unsplash.com/photo-1603833665858-e61d17a86224?auto=format&fit=crop&q=80&w=400",
         description: "Fresh, ripe bananas rich in potassium. Great for smoothies and snacking.",
         inStock: true,
         unit: "per lb"
@@ -154,7 +154,7 @@ export const products = [
         discount: 18,
         rating: 4.6,
         reviews: 189,
-        image: "/images/products/oranges.jpg",
+        image: "https://images.unsplash.com/photo-1582281227055-3179a8a310f5?auto=format&fit=crop&q=80&w=400",
         description: "Juicy navel oranges bursting with vitamin C. Seedless and easy to peel.",
         inStock: true,
         unit: "4 lb bag"
@@ -168,7 +168,7 @@ export const products = [
         discount: 20,
         rating: 4.5,
         reviews: 267,
-        image: "/images/products/strawberries.jpg",
+        image: "https://images.unsplash.com/photo-1518635017498-87af514b77db?auto=format&fit=crop&q=80&w=400",
         description: "Sweet, fresh strawberries. Perfect for desserts and breakfast.",
         inStock: true,
         unit: "16 oz container"
@@ -182,7 +182,7 @@ export const products = [
         discount: 23,
         rating: 4.7,
         reviews: 198,
-        image: "/images/products/blueberries.jpg",
+        image: "https://images.unsplash.com/photo-1498557850523-fd3d118b962e?auto=format&fit=crop&q=80&w=400",
         description: "Plump, fresh blueberries packed with antioxidants.",
         inStock: true,
         unit: "12 oz container"
@@ -196,7 +196,7 @@ export const products = [
         discount: 0,
         rating: 4.4,
         reviews: 143,
-        image: "/images/products/grapes.jpg",
+        image: "https://images.unsplash.com/photo-1537640538966-79f369b40189?auto=format&fit=crop&q=80&w=400",
         description: "Seedless green grapes, sweet and refreshing.",
         inStock: true,
         unit: "per lb"
@@ -210,7 +210,7 @@ export const products = [
         discount: 25,
         rating: 4.6,
         reviews: 176,
-        image: "/images/products/watermelon.jpg",
+        image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&q=80&w=400",
         description: "Sweet, juicy watermelon perfect for summer refreshment.",
         inStock: true,
         unit: "each"
@@ -224,7 +224,7 @@ export const products = [
         discount: 20,
         rating: 4.5,
         reviews: 134,
-        image: "/images/products/mangoes.jpg",
+        image: "https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&q=80&w=400",
         description: "Ripe, tropical mangoes with sweet, juicy flesh.",
         inStock: true,
         unit: "each"
@@ -240,7 +240,7 @@ export const products = [
         discount: 20,
         rating: 4.6,
         reviews: 312,
-        image: "/images/products/chicken-breast.jpg",
+        image: "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&q=80&w=400",
         description: "Fresh, boneless chicken breast. Lean protein for healthy meals.",
         inStock: true,
         unit: "per lb"
@@ -254,7 +254,7 @@ export const products = [
         discount: 14,
         rating: 4.5,
         reviews: 245,
-        image: "/images/products/ground-beef.jpg",
+        image: "https://images.unsplash.com/photo-1588168333986-5078d3ae3976?auto=format&fit=crop&q=80&w=400",
         description: "Premium ground beef, 85% lean. Perfect for burgers and tacos.",
         inStock: true,
         unit: "per lb"
@@ -268,7 +268,7 @@ export const products = [
         discount: 13,
         rating: 4.7,
         reviews: 189,
-        image: "/images/products/salmon.jpg",
+        image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&q=80&w=400",
         description: "Fresh Atlantic salmon fillet, rich in omega-3 fatty acids.",
         inStock: true,
         unit: "per lb"
@@ -282,7 +282,7 @@ export const products = [
         discount: 18,
         rating: 4.4,
         reviews: 156,
-        image: "/images/products/pork-chops.jpg",
+        image: "https://images.unsplash.com/photo-1602491673980-73aa38de027a?auto=format&fit=crop&q=80&w=400",
         description: "Tender, bone-in pork chops perfect for grilling.",
         inStock: true,
         unit: "per lb"
@@ -296,7 +296,7 @@ export const products = [
         discount: 17,
         rating: 4.6,
         reviews: 201,
-        image: "/images/products/shrimp.jpg",
+        image: "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&q=80&w=400",
         description: "Large, peeled and deveined shrimp. Ready to cook.",
         inStock: true,
         unit: "per lb"
@@ -310,7 +310,7 @@ export const products = [
         discount: 0,
         rating: 4.5,
         reviews: 134,
-        image: "/images/products/turkey-breast.jpg",
+        image: "https://images.unsplash.com/photo-1518492104633-ac38d094a9d4?auto=format&fit=crop&q=80&w=400",
         description: "Lean turkey breast, perfect for healthy sandwiches and meals.",
         inStock: true,
         unit: "per lb"
@@ -326,7 +326,7 @@ export const products = [
         discount: 13,
         rating: 4.6,
         reviews: 423,
-        image: "/images/products/milk.jpg",
+        image: "https://images.unsplash.com/photo-1563636619-e910009355dc?auto=format&fit=crop&q=80&w=400",
         description: "Fresh whole milk from local farms. Rich and creamy.",
         inStock: true,
         unit: "1 gallon"
@@ -340,7 +340,7 @@ export const products = [
         discount: 17,
         rating: 4.7,
         reviews: 289,
-        image: "/images/products/cheddar.jpg",
+        image: "https://images.unsplash.com/photo-1618164435735-413d3b066c9a?auto=format&fit=crop&q=80&w=400",
         description: "Sharp cheddar cheese, aged to perfection. Great for snacking and cooking.",
         inStock: true,
         unit: "8 oz block"
@@ -354,7 +354,7 @@ export const products = [
         discount: 15,
         rating: 4.8,
         reviews: 356,
-        image: "/images/products/yogurt.jpg",
+        image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&q=80&w=400",
         description: "Thick, creamy Greek yogurt. High in protein and probiotics.",
         inStock: true,
         unit: "32 oz container"
@@ -368,7 +368,7 @@ export const products = [
         discount: 11,
         rating: 4.5,
         reviews: 234,
-        image: "/images/products/butter.jpg",
+        image: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?auto=format&fit=crop&q=80&w=400",
         description: "Salted butter made from fresh cream. Perfect for baking and cooking.",
         inStock: true,
         unit: "1 lb"
@@ -382,7 +382,7 @@ export const products = [
         discount: 14,
         rating: 4.7,
         reviews: 512,
-        image: "/images/products/eggs.jpg",
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=400",
         description: "Farm-fresh large eggs. Grade A quality.",
         inStock: true,
         unit: "dozen"
@@ -396,7 +396,7 @@ export const products = [
         discount: 0,
         rating: 4.6,
         reviews: 198,
-        image: "/images/products/mozzarella.jpg",
+        image: "https://images.unsplash.com/photo-1558210857-3932fa51c89f?auto=format&fit=crop&q=80&w=400",
         description: "Fresh mozzarella cheese, perfect for pizza and caprese salad.",
         inStock: true,
         unit: "8 oz"
@@ -410,7 +410,7 @@ export const products = [
         discount: 17,
         rating: 4.4,
         reviews: 167,
-        image: "/images/products/sour-cream.jpg",
+        image: "https://images.unsplash.com/photo-1528750955925-50f6da8ed88f?auto=format&fit=crop&q=80&w=400",
         description: "Rich, tangy sour cream. Great for dips and toppings.",
         inStock: true,
         unit: "16 oz"
@@ -426,7 +426,7 @@ export const products = [
         discount: 18,
         rating: 4.7,
         reviews: 289,
-        image: "/images/products/rice.jpg",
+        image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=400",
         description: "Premium basmati rice with long, aromatic grains.",
         inStock: true,
         unit: "5 lb bag"
@@ -440,7 +440,7 @@ export const products = [
         discount: 20,
         rating: 4.5,
         reviews: 345,
-        image: "/images/products/pasta.jpg",
+        image: "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&q=80&w=400",
         description: "Italian penne pasta made from durum wheat.",
         inStock: true,
         unit: "16 oz box"
@@ -454,7 +454,7 @@ export const products = [
         discount: 13,
         rating: 4.6,
         reviews: 267,
-        image: "/images/products/bread.jpg",
+        image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=400",
         description: "Freshly baked whole grain bread, soft and nutritious.",
         inStock: true,
         unit: "24 oz loaf"
@@ -468,7 +468,7 @@ export const products = [
         discount: 17,
         rating: 4.4,
         reviews: 412,
-        image: "/images/products/cereal.jpg",
+        image: "https://images.unsplash.com/photo-1521483451569-e33803c0330c?auto=format&fit=crop&q=80&w=400",
         description: "Crunchy whole grain cereal with honey. Heart-healthy breakfast.",
         inStock: true,
         unit: "18 oz box"
@@ -482,7 +482,7 @@ export const products = [
         discount: 15,
         rating: 4.7,
         reviews: 389,
-        image: "/images/products/peanut-butter.jpg",
+        image: "https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&q=80&w=400",
         description: "Creamy peanut butter made from roasted peanuts. No added sugar.",
         inStock: true,
         unit: "16 oz jar"
@@ -496,7 +496,7 @@ export const products = [
         discount: 23,
         rating: 4.8,
         reviews: 456,
-        image: "/images/products/olive-oil.jpg",
+        image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&q=80&w=400",
         description: "Extra virgin olive oil, cold-pressed from premium olives.",
         inStock: true,
         unit: "25 oz bottle"
@@ -510,7 +510,7 @@ export const products = [
         discount: 25,
         rating: 4.5,
         reviews: 234,
-        image: "/images/products/canned-tomatoes.jpg",
+        image: "https://images.unsplash.com/photo-1590004953392-5abc2e7df4ee?auto=format&fit=crop&q=80&w=400",
         description: "Diced tomatoes in rich tomato juice. Perfect for sauces and soups.",
         inStock: true,
         unit: "14.5 oz can"
@@ -524,7 +524,7 @@ export const products = [
         discount: 0,
         rating: 4.4,
         reviews: 178,
-        image: "/images/products/black-beans.jpg",
+        image: "https://images.unsplash.com/photo-1515942400420-2b98fed1f515?auto=format&fit=crop&q=80&w=400",
         description: "Canned black beans, ready to use. High in protein and fiber.",
         inStock: true,
         unit: "15 oz can"
@@ -538,7 +538,7 @@ export const products = [
         discount: 18,
         rating: 4.6,
         reviews: 201,
-        image: "/images/products/honey.jpg",
+        image: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?auto=format&fit=crop&q=80&w=400",
         description: "Pure, raw honey from local beekeepers. Natural sweetener.",
         inStock: true,
         unit: "16 oz jar"
@@ -554,7 +554,7 @@ export const products = [
         discount: 13,
         rating: 4.5,
         reviews: 567,
-        image: "/images/products/paper-towels.jpg",
+        image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=400",
         description: "Ultra-absorbent paper towels. 8 mega rolls.",
         inStock: true,
         unit: "8 pack"
@@ -568,7 +568,7 @@ export const products = [
         discount: 13,
         rating: 4.6,
         reviews: 423,
-        image: "/images/products/dish-soap.jpg",
+        image: "https://images.unsplash.com/photo-1605663415121-7243c2d8479e?auto=format&fit=crop&q=80&w=400",
         description: "Powerful dish soap that cuts through grease. Fresh scent.",
         inStock: true,
         unit: "24 oz bottle"
@@ -582,7 +582,7 @@ export const products = [
         discount: 14,
         rating: 4.7,
         reviews: 689,
-        image: "/images/products/laundry-detergent.jpg",
+        image: "https://images.unsplash.com/photo-1610557892470-55d9e80e0bce?auto=format&fit=crop&q=80&w=400",
         description: "High-efficiency laundry detergent. Fresh clean scent. 64 loads.",
         inStock: true,
         unit: "100 oz bottle"
@@ -596,7 +596,7 @@ export const products = [
         discount: 14,
         rating: 4.6,
         reviews: 812,
-        image: "/images/products/toilet-paper.jpg",
+        image: "https://images.unsplash.com/photo-1584483766114-2cea6facdf57?auto=format&fit=crop&q=80&w=400",
         description: "Soft, strong toilet paper. 12 mega rolls = 48 regular rolls.",
         inStock: true,
         unit: "12 pack"
@@ -610,7 +610,7 @@ export const products = [
         discount: 18,
         rating: 4.5,
         reviews: 345,
-        image: "/images/products/cleaner.jpg",
+        image: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?auto=format&fit=crop&q=80&w=400",
         description: "Multi-surface cleaner that disinfects and deodorizes.",
         inStock: true,
         unit: "32 oz spray bottle"
@@ -624,7 +624,7 @@ export const products = [
         discount: 17,
         rating: 4.4,
         reviews: 456,
-        image: "/images/products/trash-bags.jpg",
+        image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=400",
         description: "Heavy-duty trash bags with drawstring. 13 gallon, 80 count.",
         inStock: true,
         unit: "80 count"
@@ -638,7 +638,7 @@ export const products = [
         discount: 14,
         rating: 4.3,
         reviews: 289,
-        image: "/images/products/sponges.jpg",
+        image: "https://images.unsplash.com/photo-1583947581924-860bda6a26df?auto=format&fit=crop&q=80&w=400",
         description: "Non-scratch scrub sponges for dishes and surfaces.",
         inStock: true,
         unit: "6 pack"
@@ -652,7 +652,7 @@ export const products = [
         discount: 14,
         rating: 4.5,
         reviews: 378,
-        image: "/images/products/hand-soap.jpg",
+        image: "https://images.unsplash.com/photo-1603507864264-d9ae3f4196ff?auto=format&fit=crop&q=80&w=400",
         description: "Moisturizing hand soap with antibacterial protection.",
         inStock: true,
         unit: "12 oz pump bottle"
@@ -666,7 +666,7 @@ export const products = [
         discount: 17,
         rating: 4.4,
         reviews: 234,
-        image: "/images/products/aluminum-foil.jpg",
+        image: "https://images.unsplash.com/photo-1596751303335-74f350c6d99b?auto=format&fit=crop&q=80&w=400",
         description: "Heavy-duty aluminum foil for cooking and food storage.",
         inStock: true,
         unit: "75 sq ft roll"
@@ -680,7 +680,7 @@ export const products = [
         discount: 11,
         rating: 4.3,
         reviews: 198,
-        image: "/images/products/plastic-wrap.jpg",
+        image: "https://images.unsplash.com/photo-1610486544929-e58f000418c3?auto=format&fit=crop&q=80&w=400",
         description: "Clear plastic wrap for food storage and preservation.",
         inStock: true,
         unit: "100 sq ft roll"
@@ -694,7 +694,7 @@ export const products = [
         discount: 13,
         rating: 4.6,
         reviews: 512,
-        image: "/images/products/ziplock-bags.jpg",
+        image: "https://images.unsplash.com/photo-1620138546344-7b2c3851bded?auto=format&fit=crop&q=80&w=400",
         description: "Resealable storage bags in assorted sizes. Freezer safe.",
         inStock: true,
         unit: "variety pack"
@@ -708,7 +708,7 @@ export const products = [
         discount: 13,
         rating: 4.5,
         reviews: 289,
-        image: "/images/products/bleach.jpg",
+        image: "https://images.unsplash.com/photo-1584622113334-93be9539f15a?auto=format&fit=crop&q=80&w=400",
         description: "Concentrated bleach for whitening and disinfecting.",
         inStock: true,
         unit: "64 oz bottle"
