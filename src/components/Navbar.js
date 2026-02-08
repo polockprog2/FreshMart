@@ -6,6 +6,7 @@ import { useCart } from '@/context/CartContext';
 import { useUser } from '@/context/UserContext';
 import SearchBar from './SearchBar';
 import { useLanguage } from '@/context/LanguageContext';
+import { useUI } from '@/context/UIContext';
 import { translations } from '@/data/translations';
 
 /**
@@ -15,75 +16,96 @@ export default function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { language, changeLanguage } = useLanguage();
     const t = translations[language] || translations.EN;
-    const { getCartCount } = useCart();
+    const { getCartCount, toggleCart } = useCart();
     const { user, logout } = useUser();
+    const { openSearch } = useUI(); // Added openSearch from useUI
 
     const categories = [
         {
-            name: 'STAPLES',
+            name: t.nav_cat_staples,
             slug: 'staples',
             hasDropdown: true,
             subcategories: [
-                { name: 'Basmati Rice', slug: 'basmati-rice' },
-                { name: 'Grains & Pulses', slug: 'grains-pulses' },
-                { name: 'Atta & Flours', slug: 'atta-flours' },
-                { name: 'Oils & Ghee', slug: 'oils-ghee' }
+                { name: t.nav_sub_basmati, slug: 'basmati-rice' },
+                { name: t.nav_sub_grains, slug: 'grains-pulses' },
+                { name: t.nav_sub_atta, slug: 'atta-flours' },
+                { name: t.nav_sub_oils, slug: 'oils-ghee' }
             ]
         },
         {
-            name: 'ESSENTIALS',
+            name: t.nav_cat_essentials,
             slug: 'essentials',
             hasDropdown: true,
             subcategories: [
-                { name: 'Spices & Herbs', slug: 'spices-herbs' },
-                { name: 'Sauces & Pastes', slug: 'sauces-pastes' },
-                { name: 'Ready to Eat', slug: 'ready-to-eat' },
-                { name: 'Snacks', slug: 'snacks' }
+                { name: t.nav_sub_spices, slug: 'spices-herbs' },
+                { name: t.nav_sub_sauces, slug: 'sauces-pastes' },
+                { name: t.nav_sub_ready_to_eat, slug: 'ready-to-eat' },
+                { name: t.nav_sub_snacks, slug: 'snacks' }
             ]
         },
-        { name: 'FRUITS & VEGETABLES', slug: 'vegetables' },
+        { name: t.nav_cat_fruits_veg, slug: 'vegetables' },
         {
-            name: 'FRESH & FROZEN',
+            name: t.nav_cat_fresh_frozen,
             slug: 'frozen',
             hasDropdown: true,
             subcategories: [
-                { name: 'Dairy & Eggs', slug: 'dairy-eggs' },
-                { name: 'Paneer & Tofu', slug: 'paneer-tofu' },
-                { name: 'Frozen Meals', slug: 'frozen-meals' },
-                { name: 'Meat & Poultry', slug: 'meat-poultry' }
+                { name: t.nav_sub_dairy, slug: 'dairy-eggs' },
+                { name: t.nav_sub_paneer, slug: 'paneer-tofu' },
+                { name: t.nav_sub_frozen_meals, slug: 'frozen-meals' },
+                { name: t.nav_sub_meat, slug: 'meat-poultry' }
             ]
         },
-        { name: 'BESTSELLERS', slug: 'featured' },
-        { name: 'SAVE FOOD', slug: 'save-food' },
+        { name: t.nav_cat_bestsellers, slug: 'featured' },
+        { name: t.nav_cat_save_food, slug: 'save-food' },
         {
-            name: 'HOME & NEW',
+            name: t.nav_cat_home_new,
             slug: 'new-arrivals',
             hasDropdown: true,
             subcategories: [
-                { name: 'Incense & Puja', slug: 'incense-puja' },
-                { name: 'Personal Care', slug: 'personal-care' },
-                { name: 'Cookware', slug: 'cookware' }
+                { name: t.nav_sub_incense, slug: 'incense-puja' },
+                { name: t.nav_sub_personal_care, slug: 'personal-care' },
+                { name: t.nav_sub_cookware, slug: 'cookware' }
             ]
         },
     ];
 
     return (
         <header className="w-full z-50 bg-white">
-            {/* Row 1: Announcement Bar */}
-            <div className="bg-[#F9F7F2] border-b border-gray-100 py-2">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-wrap justify-between items-center text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                        <div className="flex items-center gap-1.5 px-2">
-                            <span>📦</span> {t.announcement_shipping}
+            {/* Row 1: Announcement Bar (Optimized for Mobile) */}
+            <div className="bg-[#F9F7F2] border-b border-gray-100 py-1.5 overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4">
+                    <div className="flex items-center gap-8 text-[10px] font-bold text-gray-500 uppercase tracking-[0.15em] whitespace-nowrap animate-scroll-mobile md:animate-none md:justify-between md:flex-wrap">
+                        {/* Items Group 1 */}
+                        <div className="flex items-center gap-8">
+                            <div className="flex items-center gap-1.5 flex-shrink-0">
+                                <span className="text-sm">📦</span> {t.announcement_shipping}
+                            </div>
+                            <div className="flex items-center gap-1.5 flex-shrink-0">
+                                <span className="text-sm">🏅</span> {t.announcement_startup}
+                            </div>
+                            <div className="flex items-center gap-1.5 flex-shrink-0">
+                                <span className="text-sm">💚</span> {t.announcement_customers}
+                            </div>
+                            <div className="flex items-center gap-1.5 flex-shrink-0">
+                                <span className="text-sm">🍛</span> {t.announcement_about}
+                                <Link href="/about" className="hover:text-[#003B4A] transition-colors ml-1 border-b border-[#003B4A]/30">→ {t.about_us}</Link>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-1.5 px-2">
-                            <span>🏅</span> {t.announcement_startup}
-                        </div>
-                        <div className="flex items-center gap-1.5 px-2">
-                            <span>💚</span> {t.announcement_customers}
-                        </div>
-                        <div className="flex items-center gap-1.5 px-2">
-                            <span>🍛</span> {t.announcement_about} <Link href="/about" className="hover:text-[#003B4A] transition-colors ml-1">→ {t.about_us}</Link>
+                        {/* Items Group 2 (For seamless loop on mobile) */}
+                        <div className="flex md:hidden items-center gap-8">
+                            <div className="flex items-center gap-1.5 flex-shrink-0">
+                                <span className="text-sm">📦</span> {t.announcement_shipping}
+                            </div>
+                            <div className="flex items-center gap-1.5 flex-shrink-0">
+                                <span className="text-sm">🏅</span> {t.announcement_startup}
+                            </div>
+                            <div className="flex items-center gap-1.5 flex-shrink-0">
+                                <span className="text-sm">💚</span> {t.announcement_customers}
+                            </div>
+                            <div className="flex items-center gap-1.5 flex-shrink-0">
+                                <span className="text-sm">🍛</span> {t.announcement_about}
+                                <Link href="/about" className="hover:text-[#003B4A] transition-colors ml-1 border-b border-[#003B4A]/30">→ {t.about_us}</Link>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -108,11 +130,14 @@ export default function Navbar() {
                     {/* Icons Section */}
                     <div className="flex items-center gap-4 md:gap-6">
                         {/* Language Switcher */}
+                        {/* Language Switcher - Hide text on mobile */}
                         <div className="relative group">
                             <div className="flex items-center gap-1 text-sm font-bold text-[#003B4A] cursor-pointer hover:opacity-80 transition-opacity">
-                                <span className="text-lg">{language === 'EN' ? '🇬🇧' : '🇧🇩'}</span>
-                                <span className="hidden sm:inline uppercase">{language}</span>
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <span className="text-xl">
+                                    {language === 'EN' ? '🇬🇧' : language === 'BN' ? '🇧🇩' : '🇩🇪'}
+                                </span>
+                                <span className="hidden md:inline uppercase text-xs">{language}</span>
+                                <svg className="w-4 h-4 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>
@@ -140,31 +165,37 @@ export default function Navbar() {
                             </div>
                         </div>
 
-                        {/* Wishlist */}
-                        <Link href="/wishlist" className="p-1 hover:opacity-70 transition-opacity">
-                            <svg className="w-7 h-7 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {/* Wishlist - Hide on extra small */}
+                        <Link href="/wishlist" className="p-1 hover:opacity-70 transition-opacity hidden sm:block">
+                            <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
                         </Link>
 
-                        {/* Profile */}
+                        {/* Profile - Hide text on mobile */}
                         <Link href="/profile" className="p-1 hover:opacity-70 transition-opacity">
-                            <svg className="w-7 h-7 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                         </Link>
 
-                        {/* Cart */}
-                        <Link href="/cart" className="relative p-1 hover:opacity-70 transition-opacity">
-                            <svg className="w-7 h-7 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
+                        {/* Cart Icon */}
+                        <button
+                            onClick={toggleCart}
+                            className="relative p-2 text-gray-700 hover:text-green-600 transition-colors group"
+                            aria-label="Toggle Cart"
+                        >
+                            <div className="bg-gray-100 p-2 rounded-xl group-hover:bg-green-100 transition-colors">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </div>
                             {getCartCount() > 0 && (
-                                <span className="absolute -top-1 -right-1 bg-[#BF4136] text-white text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center">
+                                <span className="absolute -top-1 -right-1 bg-green-600 text-white text-[10px] font-black h-5 w-5 flex items-center justify-center rounded-full border-2 border-white shadow-lg animate-bounce">
                                     {getCartCount()}
                                 </span>
                             )}
-                        </Link>
+                        </button>
 
                         {/* User Menu */}
                         {user ? (
@@ -224,7 +255,7 @@ export default function Navbar() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-8 h-12">
                     {/* ! VALUE DEALS (Teal Badge) */}
                     <Link
-                        href="/products?category=value-deals"
+                        href="/deals/value"
                         className="bg-[#003B4A] text-white px-4 py-1.5 rounded-full text-xs font-black italic tracking-wide hover:opacity-90 transition-opacity whitespace-nowrap"
                     >
                         ! VALUE DEALS
@@ -232,7 +263,7 @@ export default function Navbar() {
 
                     {/* WEEKLY DEALS (Red Badge) */}
                     <Link
-                        href="/products?category=weekly-deals"
+                        href="/deals/weekly"
                         className="bg-[#BF4136] text-white px-4 py-1.5 rounded-full text-xs font-black italic tracking-wide hover:opacity-90 transition-opacity whitespace-nowrap"
                     >
                         WEEKLY DEALS
@@ -276,34 +307,84 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile Sidebar Overlay */}
+            {/* Mobile Sidebar Overlay (Refined) */}
             {isMobileMenuOpen && (
-                <div className="fixed inset-0 bg-black/50 z-[60] md:hidden" onClick={() => setIsMobileMenuOpen(false)}>
+                <div className="fixed inset-0 bg-black/60 z-[70] md:hidden backdrop-blur-sm transition-all duration-300" onClick={() => setIsMobileMenuOpen(false)}>
                     <div
-                        className="absolute right-0 top-0 w-80 h-full bg-white p-6 shadow-2xl animate-slide-in-right"
+                        className="absolute left-0 top-0 w-[85%] max-w-[320px] h-full bg-white shadow-2xl flex flex-col animate-slide-in-left"
                         onClick={e => e.stopPropagation()}
                     >
-                        <div className="flex justify-between items-center mb-8 border-b pb-4">
-                            <span className="text-xl font-black text-[#003B4A]">MENU</span>
-                            <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 bg-gray-100 rounded-full">
+                        {/* Sidebar Header */}
+                        <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-[#F9F7F2]">
+                            <div className="logo-animated scale-75 origin-left">
+                                <span>📦Baksho®</span>
+                                <span>📦Baksho®</span>
+                            </div>
+                            <button onClick={() => setIsMobileMenuOpen(false)} className="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-sm text-gray-400 hover:text-red-500 transition-colors">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
                         </div>
 
-                        <div className="space-y-4">
-                            <Link href="/products?category=value-deals" className="flex items-center text-[#003B4A] font-black italic text-lg py-2 border-b border-gray-50">
-                                💰 ! VALUE DEALS
+                        {/* Sidebar Content */}
+                        <div className="flex-1 overflow-y-auto py-6 px-6">
+                            <div className="space-y-6">
+                                {/* Special Sections */}
+                                <div className="space-y-3">
+                                    <Link
+                                        href="/deals/value"
+                                        className="flex items-center gap-3 p-4 bg-[#003B4A] text-white rounded-2xl font-black italic shadow-lg active:scale-95 transition-all text-sm"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                        <span className="text-xl">💰</span> ! VALUE DEALS
+                                    </Link>
+                                    <Link
+                                        href="/deals/weekly"
+                                        className="flex items-center gap-3 p-4 bg-[#BF4136] text-white rounded-2xl font-black italic shadow-lg active:scale-95 transition-all text-sm"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                        <span className="text-xl">🔥</span> WEEKLY DEALS
+                                    </Link>
+                                </div>
+
+                                {/* Main Categories */}
+                                <div className="space-y-1">
+                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 ml-2">Shop by Category</p>
+                                    {categories.map(cat => (
+                                        <div key={cat.name} className="border-b border-gray-50 last:border-0">
+                                            <Link
+                                                href={`/products?category=${cat.slug}`}
+                                                className="flex items-center justify-between py-4 group"
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                            >
+                                                <span className="font-bold text-gray-700 group-hover:text-[#003B4A] transition-colors">{cat.name}</span>
+                                                <svg className="w-4 h-4 text-gray-300 group-hover:text-[#003B4A] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                                                </svg>
+                                            </Link>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Sidebar Footer */}
+                        <div className="p-6 border-t border-gray-100 bg-[#F9F7F2]">
+                            <Link
+                                href="/profile"
+                                className="flex items-center gap-3 text-gray-600 font-bold text-sm mb-4"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+                                    👤
+                                </div>
+                                My Account
                             </Link>
-                            <Link href="/products?category=weekly-deals" className="flex items-center text-[#BF4136] font-black italic text-lg py-2 border-b border-gray-50">
-                                🔥 WEEKLY DEALS
-                            </Link>
-                            {categories.map(cat => (
-                                <Link key={cat.name} href={`/products?category=${cat.slug}`} className="block font-bold text-gray-700 py-2 border-b border-gray-50 uppercase text-sm">
-                                    {cat.name}
-                                </Link>
-                            ))}
+                            <div className="flex gap-4">
+                                <button className="flex-1 py-2 rounded-lg bg-white border border-gray-200 text-xs font-bold text-gray-600 shadow-sm" onClick={() => changeLanguage('EN')}>EN</button>
+                                <button className="flex-1 py-2 rounded-lg bg-white border border-gray-200 text-xs font-bold text-gray-600 shadow-sm" onClick={() => changeLanguage('BN')}>BN</button>
+                            </div>
                         </div>
                     </div>
                 </div>

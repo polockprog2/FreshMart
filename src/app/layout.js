@@ -2,8 +2,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 import { UserProvider } from "@/context/UserContext";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import { BannerProvider } from "@/context/BannerContext";
+import { LanguageProvider } from "@/context/LanguageContext";
+import { UIProvider } from "@/context/UIContext";
+import LayoutContent from "@/components/LayoutContent";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,20 +24,21 @@ export const metadata = {
   },
 };
 
-import { LanguageProvider } from "@/context/LanguageContext";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`} suppressHydrationWarning>
         <LanguageProvider>
-          <UserProvider>
-            <CartProvider>
-              <Navbar />
-              {children}
-              <Footer />
-            </CartProvider>
-          </UserProvider>
+          <UIProvider>
+            <UserProvider>
+              <BannerProvider>
+                <CartProvider>
+                  <LayoutContent>{children}</LayoutContent>
+                </CartProvider>
+              </BannerProvider>
+            </UserProvider>
+          </UIProvider>
         </LanguageProvider>
       </body>
     </html>

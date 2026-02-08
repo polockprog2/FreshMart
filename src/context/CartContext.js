@@ -18,6 +18,7 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isCartOpen, setIsCartOpen] = useState(false);
 
     // Load cart from localStorage on mount
     useEffect(() => {
@@ -57,6 +58,8 @@ export const CartProvider = ({ children }) => {
                 return [...prevItems, { ...product, quantity }];
             }
         });
+        // Auto-open cart drawer when adding item
+        setIsCartOpen(true);
     };
 
     // Remove item from cart
@@ -85,6 +88,10 @@ export const CartProvider = ({ children }) => {
     const clearCart = () => {
         setCartItems([]);
     };
+
+    const toggleCart = () => setIsCartOpen(!isCartOpen);
+    const openCart = () => setIsCartOpen(true);
+    const closeCart = () => setIsCartOpen(false);
 
     // Calculate cart totals
     const getCartTotal = () => {
@@ -123,7 +130,11 @@ export const CartProvider = ({ children }) => {
         getCartTax,
         getDeliveryFee,
         getCartGrandTotal,
-        isLoading
+        isLoading,
+        isCartOpen,
+        toggleCart,
+        openCart,
+        closeCart
     };
 
     return (

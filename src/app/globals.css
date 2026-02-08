@@ -91,8 +91,8 @@ html {
 
 .logo-animated span:nth-child(3) {
   position: absolute;
-  top: 50%;
-  left: 0;
+  top: 49%;
+  left: 5;
   transform: translateY(-50%) scaleY(0);
   width: 100%;
   color: #003B4A;

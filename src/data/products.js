@@ -26,7 +26,7 @@ export const products = [
         discount: 25,
         rating: 4.3,
         reviews: 95,
-        image: "https://images.unsplash.com/photo-1618512496248-a0778a7d3d0b?auto=format&fit=crop&q=80&w=400",
+        image: null,
         description: "Crisp red onions with a mild, sweet flavor. Great for grilling and salads.",
         inStock: true,
         unit: "per lb"
@@ -40,7 +40,7 @@ export const products = [
         discount: 20,
         rating: 4.6,
         reviews: 203,
-        image: "https://images.unsplash.com/photo-1518977676601-b53f02bad177?auto=format&fit=crop&q=80&w=400",
+        image: null,
         description: "Premium russet potatoes ideal for baking, mashing, and frying.",
         inStock: true,
         unit: "5 lb bag"
@@ -82,7 +82,7 @@ export const products = [
         discount: 17,
         rating: 4.5,
         reviews: 112,
-        image: "https://images.unsplash.com/photo-1566385101042-1a0aa0c12e8c?auto=format&fit=crop&q=80&w=400",
+        image: null,
         description: "Colorful mix of red, yellow, and green bell peppers. Sweet and crunchy.",
         inStock: true,
         unit: "3 pack"
@@ -154,7 +154,7 @@ export const products = [
         discount: 18,
         rating: 4.6,
         reviews: 189,
-        image: "https://images.unsplash.com/photo-1582281227055-3179a8a310f5?auto=format&fit=crop&q=80&w=400",
+        image: null,
         description: "Juicy navel oranges bursting with vitamin C. Seedless and easy to peel.",
         inStock: true,
         unit: "4 lb bag"
@@ -168,7 +168,7 @@ export const products = [
         discount: 20,
         rating: 4.5,
         reviews: 267,
-        image: "https://images.unsplash.com/photo-1518635017498-87af514b77db?auto=format&fit=crop&q=80&w=400",
+        image: null,
         description: "Sweet, fresh strawberries. Perfect for desserts and breakfast.",
         inStock: true,
         unit: "16 oz container"

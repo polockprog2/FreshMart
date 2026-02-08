@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useUser } from '@/context/UserContext';
 import { useLanguage } from '@/context/LanguageContext';
@@ -9,6 +9,8 @@ import { translations } from '@/data/translations';
 
 export default function LoginPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const redirect = searchParams.get('redirect');
     const { login } = useUser();
     const { language } = useLanguage();
     const t = translations[language] || translations.EN;
@@ -165,23 +167,6 @@ export default function LoginPage() {
                             {t.sign_up}
                         </Link>
                     </p>
-                </div>
-
-                {/* Demo Credentials Footer */}
-                <div className="mt-8 bg-blue-50/50 border border-blue-100/50 rounded-2xl p-5 backdrop-blur-sm">
-                    <p className="text-[10px] font-black text-blue-900/40 uppercase tracking-widest mb-3 text-center">Development Environment</p>
-                    <div className="grid grid-cols-2 gap-4 text-[11px]">
-                        <div className="space-y-1">
-                            <span className="block font-black text-blue-900/60 uppercase tracking-wider">Demo User</span>
-                            <code className="text-blue-700 bg-blue-100/50 px-1.5 py-0.5 rounded">demo@example.com</code>
-                            <code className="text-blue-700 block mt-1">password123</code>
-                        </div>
-                        <div className="space-y-1 border-l border-blue-200/50 pl-4">
-                            <span className="block font-black text-blue-900/60 uppercase tracking-wider">Admin</span>
-                            <code className="text-blue-700 bg-blue-100/50 px-1.5 py-0.5 rounded">admin@example.com</code>
-                            <code className="text-blue-700 block mt-1">admin123</code>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

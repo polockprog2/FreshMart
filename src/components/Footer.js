@@ -18,12 +18,12 @@ export default function Footer() {
     const handleNewsletterSubmit = (e) => {
         e.preventDefault();
         // In production, this would call an API
-        alert('Thank you for subscribing!');
+        alert(t.newsletter_success || 'Thank you for subscribing!');
         setEmail('');
     };
 
     return (
-        <footer className="bg-gray-900 text-white mt-16">
+        <footer className="bg-gray-900 text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {/* Company Info */}
@@ -72,11 +72,11 @@ export default function Footer() {
                         <h3 className="text-lg font-semibold mb-4 text-green-400">{t.footer_categories_title}</h3>
                         <ul className="space-y-2">
                             <li><Link href="/products?category=value-deals" className="text-gray-400 hover:text-white transition-colors">{t.cat_value_deals.replace('!', '')}</Link></li>
-                            <li><Link href="/products?category=basmati-rice" className="text-gray-400 hover:text-white transition-colors">Basmati Rice</Link></li>
-                            <li><Link href="/products?category=vegetables" className="text-gray-400 hover:text-white transition-colors">Vegetables</Link></li>
-                            <li><Link href="/products?category=fruits" className="text-gray-400 hover:text-white transition-colors">Fruits</Link></li>
-                            <li><Link href="/products?category=spices" className="text-gray-400 hover:text-white transition-colors">Spices</Link></li>
-                            <li><Link href="/products?category=ready-to-eat" className="text-gray-400 hover:text-white transition-colors">Ready to Eat</Link></li>
+                            <li><Link href="/products?category=staples" className="text-gray-400 hover:text-white transition-colors">{t.nav_sub_basmati}</Link></li>
+                            <li><Link href="/products?category=vegetables" className="text-gray-400 hover:text-white transition-colors">{t.nav_cat_fruits_veg}</Link></li>
+                            <li><Link href="/products?category=fruits" className="text-gray-400 hover:text-white transition-colors">{language === 'BN' ? 'ফলমূল' : language === 'DE' ? 'Früchte' : 'Fruits'}</Link></li>
+                            <li><Link href="/products?category=essentials" className="text-gray-400 hover:text-white transition-colors">{t.nav_sub_spices}</Link></li>
+                            <li><Link href="/products?category=essentials" className="text-gray-400 hover:text-white transition-colors">{t.nav_sub_ready_to_eat}</Link></li>
                         </ul>
                     </div>
 

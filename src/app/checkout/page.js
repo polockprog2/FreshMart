@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { useUser } from '@/context/UserContext';
@@ -29,6 +29,13 @@ export default function CheckoutPage() {
     });
 
     const [errors, setErrors] = useState({});
+
+    // Redirect if cart is empty - Move to useEffect to prevent render-time update error
+    useEffect(() => {
+        if (cartItems.length === 0) {
+            router.push('/cart');
+        }
+    }, [cartItems.length, router]);
 
     const handleChange = (e) => {
         setFormData({
@@ -95,7 +102,6 @@ export default function CheckoutPage() {
     };
 
     if (cartItems.length === 0) {
-        router.push('/cart');
         return null;
     }
 

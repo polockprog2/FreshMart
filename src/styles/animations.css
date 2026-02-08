@@ -108,15 +108,19 @@
     0% {
         background-position: -1000px 0;
     }
+
     100% {
         background-position: 1000px 0;
     }
 }
 
 @keyframes glow {
-    0%, 100% {
+
+    0%,
+    100% {
         box-shadow: 0 0 5px rgba(16, 185, 129, 0.3);
     }
+
     50% {
         box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
     }
@@ -165,6 +169,30 @@
 
 .animate-glow {
     animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes scroll-mobile {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-scroll-mobile {
+    display: flex;
+    animation: scroll-mobile 30s linear infinite;
+    width: max-content;
+}
+
+@media (min-width: 768px) {
+    .animate-scroll-mobile {
+        animation: none;
+        width: 100%;
+        transform: none;
+    }
 }
 
 /* Stagger animation delays */

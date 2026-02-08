@@ -7,10 +7,12 @@ import DealsCarousel from '@/components/DealsCarousel';
 import ProductCard from '@/components/ProductCard';
 import CategoryCard from '@/components/CategoryCard';
 import TrustSection from '@/components/TrustSection';
+import BannerSection from '@/components/BannerSection';
 import { getFeaturedProducts, getDealsProducts } from '@/data/products';
 import { categories } from '@/data/categories';
 import { useLanguage } from '@/context/LanguageContext';
 import { translations } from '@/data/translations';
+import SkeletonCard from '@/components/SkeletonCard';
 
 /**
  * Home Page - Jamoona Style Layout
@@ -19,14 +21,21 @@ export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [weeklyDeals, setWeeklyDeals] = useState([]);
   const [valueDeals, setValueDeals] = useState([]);
+  const [isDataLoading, setIsDataLoading] = useState(true);
   const { language } = useLanguage();
   const t = translations[language] || translations.EN;
 
   useEffect(() => {
-    setFeaturedProducts(getFeaturedProducts().slice(0, 8));
-    const deals = getDealsProducts();
-    setWeeklyDeals(deals.slice(0, 8));
-    setValueDeals(deals.slice(8, 16));
+    // Simulate premium loading delay
+    const timer = setTimeout(() => {
+      setFeaturedProducts(getFeaturedProducts().slice(0, 8));
+      const deals = getDealsProducts();
+      setWeeklyDeals(deals.slice(0, 8));
+      setValueDeals(deals.slice(8, 16));
+      setIsDataLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -37,10 +46,17 @@ export default function Home() {
       {/* Weekly Deals Carousel */}
       {weeklyDeals.length > 0 && (
         <section className="py-12 bg-[#F9F7F2]/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 flex justify-between items-center">
+            <h2 className="text-3xl font-black text-red-600">{t.cat_weekly_deals} 🔥</h2>
+            <Link href="/deals/weekly" className="text-red-600 hover:text-red-700 font-bold text-lg transition-colors">
+              View All →
+            </Link>
+          </div>
           <DealsCarousel
-            title={`${t.cat_weekly_deals} 🔥`}
+            title=""
             products={weeklyDeals}
             badgeType="weekly-deal"
+            isLoading={isDataLoading}
           />
         </section>
       )}
@@ -48,13 +64,23 @@ export default function Home() {
       {/* Value Deals Carousel */}
       {valueDeals.length > 0 && (
         <section className="py-8 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 flex justify-between items-center">
+            <h2 className="text-3xl font-black text-amber-600">{t.cat_value_deals} 💰</h2>
+            <Link href="/deals/value" className="text-amber-600 hover:text-amber-700 font-bold text-lg transition-colors">
+              View All →
+            </Link>
+          </div>
           <DealsCarousel
-            title={`${t.cat_value_deals} 💰`}
+            title=""
             products={valueDeals}
             badgeType="value-deal"
+            isLoading={isDataLoading}
           />
         </section>
       )}
+
+      {/* Promotional Banners */}
+      <BannerSection />
 
       {/* Categories Grid */}
       <section className="py-20 bg-gradient-to-b from-white via-gray-50 to-white">
@@ -98,11 +124,19 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {featuredProducts.map((product, index) => (
-              <div key={product.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 75}ms` }}>
-                <ProductCard product={product} />
-              </div>
-            ))}
+            {isDataLoading ? (
+              [...Array(8)].map((_, i) => (
+                <div key={i}>
+                  <SkeletonCard />
+                </div>
+              ))
+            ) : (
+              featuredProducts.map((product, index) => (
+                <div key={product.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 75}ms` }}>
+                  <ProductCard product={product} />
+                </div>
+              ))
+            )}
           </div>
 
           <div className="text-center mt-12 md:hidden">
@@ -145,24 +179,64 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 text-white relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -ml-48 -mb-48"></div>
+      {/* Refined & Compact Premium CTA Section */}
+      <section className="py-16 md:py-20 relative overflow-hidden bg-[#003B4A]">
+        {/* Complex Mesh Background */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-green-600/40 via-emerald-600/20 to-transparent"></div>
+          <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-green-500/10 rounded-full blur-[100px] -mr-48 -mb-48 animate-pulse"></div>
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in-up">{t.ready_to_shop}</h2>
-          <p className="text-xl md:text-2xl mb-10 text-green-100 max-w-2xl mx-auto animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-            {t.join_customers}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-            <Link href="/products" className="bg-white text-green-600 px-8 py-4 rounded-lg font-bold hover:bg-gray-100 transition-all duration-300 text-lg shadow-lg hover:shadow-2xl transform hover:scale-105 active:scale-95">
-              {t.browse_products}
-            </Link>
-            <Link href="/register" className="bg-green-700 text-white px-8 py-4 rounded-lg font-bold hover:bg-green-800 transition-all duration-300 text-lg border-2 border-white shadow-lg hover:shadow-2xl transform hover:scale-105 active:scale-95">
-              {t.sign_up}
-            </Link>
+          {/* Subtle Grid Pattern */}
+          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] p-8 md:p-16 text-center shadow-2xl relative overflow-hidden group">
+            {/* Inner Glow */}
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+
+            <div className="max-w-2xl mx-auto">
+              <div className="mb-6 inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] font-black uppercase tracking-[0.2em] text-green-300 animate-fade-in">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                Join the Community
+              </div>
+
+              <h2 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight tracking-tighter drop-shadow-2xl animate-fade-in-up">
+                {t.ready_to_shop}
+              </h2>
+
+              <p className="text-lg md:text-xl mb-10 text-gray-300 font-medium leading-relaxed animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+                {t.join_customers}
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+                <Link
+                  href="/products"
+                  className="group relative px-10 py-4 bg-white text-[#003B4A] rounded-full font-black text-sm uppercase tracking-widest shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-110 active:scale-95 overflow-hidden"
+                >
+                  <span className="relative z-10">{t.browse_products}</span>
+                  <div className="absolute inset-0 bg-green-500 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                  <span className="absolute inset-0 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20 font-black">{t.browse_products}</span>
+                </Link>
+
+                <Link
+                  href="/register"
+                  className="px-10 py-4 bg-transparent text-white border border-white/30 rounded-full font-black text-sm uppercase tracking-widest hover:bg-white hover:text-[#003B4A] hover:border-white transition-all duration-500 hover:scale-105 active:scale-95 backdrop-blur-md"
+                >
+                  {t.sign_up}
+                </Link>
+              </div>
+            </div>
+
+            {/* Decorative Floating Icon */}
+            <div className="absolute -bottom-6 -right-6 opacity-10 pointer-events-none transform rotate-12 transition-transform group-hover:rotate-0 duration-1000">
+              <svg className="w-48 h-48 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+              </svg>
+            </div>
           </div>
         </div>
       </section>

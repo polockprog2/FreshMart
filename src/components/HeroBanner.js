@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/context/LanguageContext';
 import { translations } from '@/data/translations';
 
@@ -42,10 +43,13 @@ export default function HeroBanner() {
                     <div className="relative right-[-100] hidden lg:block animate-fade-in-down" style={{ animationDelay: '200ms' }}>
                         <div className="relative w-full h-[450px] bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-white/50 group hover:shadow-3xl transition-all duration-700">
                             {/* Full-bleed Background Image */}
-                            <img
+                            <Image
                                 src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800"
                                 alt="Fresh Groceries"
-                                className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2000ms]"
+                                fill
+                                priority
+                                className="object-cover group-hover:scale-110 transition-transform duration-[2000ms]"
+                                sizes="(max-width: 1024px) 100vw, 50vw"
                             />
 
                             {/* Soft Bottom Gradient Overlay */}

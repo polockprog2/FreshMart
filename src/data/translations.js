@@ -48,6 +48,7 @@ export const translations = {
         footer_connect_title: "Stay Connected",
         newsletter_desc: "Subscribe to get special offers, recipes, and updates!",
         newsletter_placeholder: "Your email",
+        newsletter_success: "Thank you for subscribing!",
         language_label: "Language",
         all_rights_reserved: "All rights reserved.",
         made_with: "Made with ❤️ in",
@@ -193,6 +194,58 @@ export const translations = {
         order_items: "Order Items",
         loading_order_details: "Loading order details...",
 
+        // Navbar Categories & Subcategories
+        nav_cat_staples: 'STAPLES',
+        nav_cat_essentials: 'ESSENTIALS',
+        nav_cat_fruits_veg: 'FRUITS & VEGETABLES',
+        nav_cat_fresh_frozen: 'FRESH & FROZEN',
+        nav_cat_bestsellers: 'BESTSELLERS',
+        nav_cat_save_food: 'SAVE FOOD',
+        nav_cat_home_new: 'HOME & NEW',
+
+        nav_sub_basmati: 'Basmati Rice',
+        nav_sub_grains: 'Grains & Pulses',
+        nav_sub_atta: 'Atta & Flours',
+        nav_sub_oils: 'Oils & Ghee',
+        nav_sub_spices: 'Spices & Herbs',
+        nav_sub_sauces: 'Sauces & Pastes',
+        nav_sub_ready_to_eat: 'Ready to Eat',
+        nav_sub_snacks: 'Snacks',
+        nav_sub_dairy: 'Dairy & Eggs',
+        nav_sub_paneer: 'Paneer & Tofu',
+        nav_sub_frozen_meals: 'Frozen Meals',
+        nav_sub_meat: 'Meat & Poultry',
+        nav_sub_incense: 'Incense & Puja',
+        nav_sub_personal_care: 'Personal Care',
+        nav_sub_cookware: 'Cookware',
+
+        // Cart Drawer Specifics
+        cart_summary: "Your Cart",
+        cart_subtotal: "Subtotal",
+        cart_tax: "Estimated Tax",
+        cart_delivery: "Delivery Fee",
+        cart_total: "Total Amount",
+        cart_empty: "Your cart is empty",
+        cart_empty_desc: "Add delicious groceries to get started!",
+        cart_continue_shopping: "Continue Shopping",
+        cart_unit_prefix: "1",
+        cart_unit_default: "unit",
+
+        // Search Overlay Specifics
+        search_suggestions: "Top Suggestions",
+        search_popular_cats: "Popular Categories",
+        search_view_all: "View all results for",
+        search_no_results: "No items found",
+        search_no_results_desc: "Try searching for something else, like \"Organic Apples\"",
+        search_shortcut_nav: "to navigate",
+        search_shortcut_select: "to select",
+        search_powered_by: "Powered by Baksho",
+
+        // Status
+        instock: "In Stock",
+        coming_soon: "Coming Soon",
+        limited_stock: "Limited Stock",
+
         // Checkout Page
         checkout: "Checkout",
         street_address: "Street Address",
@@ -262,6 +315,7 @@ export const translations = {
         footer_connect_title: "যুক্ত থাকুন",
         newsletter_desc: "বিশেষ অফার এবং রেসিপি পেতে সাবস্ক্রাইব করুন!",
         newsletter_placeholder: "আপনার ইমেল",
+        newsletter_success: "সাবস্ক্রাইব করার জন্য ধন্যবাদ!",
         language_label: "ভাষা",
         all_rights_reserved: "সর্বস্বত্ব সংরক্ষিত।",
         made_with: "তৈরি করা হয়েছে ❤️ সাথে",
@@ -288,7 +342,6 @@ export const translations = {
         first_name: "প্রথম নাম",
         last_name: "শেষ নাম",
         phone_number: "ফোন নম্বর",
-        confirm_password: "পাসওয়ার্ড নিশ্চিত করুন",
         confirm_password: "পাসওয়ার্ড নিশ্চিত করুন",
         agree_terms: "আমি ব্যবহারের শর্তাবলী এবং গোপনীয়তা নীতির সাথে একমত",
 
@@ -408,6 +461,58 @@ export const translations = {
         order_items: "অর্ডার করা আইটেম",
         loading_order_details: "অর্ডারের তথ্য লোড হচ্ছে...",
 
+        // Navbar Categories & Subcategories
+        nav_cat_staples: 'প্রধান খাদ্য',
+        nav_cat_essentials: 'প্রয়োজনীয় পণ্য',
+        nav_cat_fruits_veg: 'ফল ও সবজি',
+        nav_cat_fresh_frozen: 'তাজা ও হিমায়িত',
+        nav_cat_bestsellers: 'সেরা বিক্রয়',
+        nav_cat_save_food: 'সাশ্রয়ী খাবার',
+        nav_cat_home_new: 'নতুন পণ্য',
+
+        nav_sub_basmati: 'বাসমতি চাল',
+        nav_sub_grains: 'ডাল ও শস্য',
+        nav_sub_atta: 'আটা ও ময়দা',
+        nav_sub_oils: 'তেল ও ঘি',
+        nav_sub_spices: 'মশলা ও হার্বস',
+        nav_sub_sauces: 'সস ও পেস্ট',
+        nav_sub_ready_to_eat: 'রেডি টু ইট',
+        nav_sub_snacks: 'স্ন্যাকস',
+        nav_sub_dairy: 'দুধ ও ডিম',
+        nav_sub_paneer: 'পনির ও তোফু',
+        nav_sub_frozen_meals: 'হিমায়িত খাবার',
+        nav_sub_meat: 'মাংস ও পোল্ট্রি',
+        nav_sub_incense: 'আগরবাতি ও পূজা',
+        nav_sub_personal_care: 'পার্সোনাল কেয়ার',
+        nav_sub_cookware: 'রান্নার সরঞ্জাম',
+
+        // Cart Drawer Specifics
+        cart_summary: "আপনার কার্ট",
+        cart_subtotal: "সাবটোটাল",
+        cart_tax: "আনুমানিক ট্যাক্স",
+        cart_delivery: "ডেলিভারি ফি",
+        cart_total: "মোট পরিমাণ",
+        cart_empty: "আপনার কার্ট খালি",
+        cart_empty_desc: "কেনাকাটা শুরু করতে পণ্য যোগ করুন!",
+        cart_continue_shopping: "কেনাকাটা চালিয়ে যান",
+        cart_unit_prefix: "১",
+        cart_unit_default: "টি",
+
+        // Search Overlay Specifics
+        search_suggestions: "সেরা পরামর্শ",
+        search_popular_cats: "জনপ্রিয় ক্যাটাগরি",
+        search_view_all: "সব রেজাল্ট দেখুন",
+        search_no_results: "কোনো পণ্য পাওয়া যায়নি",
+        search_no_results_desc: "অন্য কিছু লিখে চেষ্টা করুন, যেমন \"Organic Apples\"",
+        search_shortcut_nav: "নেভিগেট করতে",
+        search_shortcut_select: "সিলেক্ট করতে",
+        search_powered_by: "বাকশো দ্বারা পরিচালিত",
+
+        // Status
+        instock: "স্টকে আছে",
+        coming_soon: "শীঘ্রই আসছে",
+        limited_stock: "সীমিত স্টক",
+
         // Checkout Page
         checkout: "চেকআউট",
         street_address: "রাস্তা ও বাড়ির নম্বর",
@@ -477,6 +582,7 @@ export const translations = {
         footer_connect_title: "Bleiben Sie in Verbindung",
         newsletter_desc: "Abonnieren Sie für Sonderangebote, Rezepte und Updates!",
         newsletter_placeholder: "Ihre E-Mail",
+        newsletter_success: "Vielen Dank für Ihr Abonnement!",
         language_label: "Sprache",
         all_rights_reserved: "Alle Rechte vorbehalten.",
         made_with: "Hergestellt mit ❤️ in",
@@ -621,6 +727,58 @@ export const translations = {
         delivery_address: "Lieferadresse",
         order_items: "Bestellte Artikel",
         loading_order_details: "Bestelldetails werden geladen...",
+
+        // Navbar Categories & Subcategories
+        nav_cat_staples: 'GRUNDNAHRUNGSMITTEL',
+        nav_cat_essentials: 'UNVERZICHTBAR',
+        nav_cat_fruits_veg: 'OBST & GEMÜSE',
+        nav_cat_fresh_frozen: 'FRISCH & TIEFGEKÜHLT',
+        nav_cat_bestsellers: 'BESTSELLER',
+        nav_cat_save_food: 'LEBENSMITTEL RETTEN',
+        nav_cat_home_new: 'HEIM & NEU',
+
+        nav_sub_basmati: 'Basmatireis',
+        nav_sub_grains: 'Getreide & Hülsenfrüchte',
+        nav_sub_atta: 'Atta & Mehl',
+        nav_sub_oils: 'Öle & Ghee',
+        nav_sub_spices: 'Gewürze & Kräuter',
+        nav_sub_sauces: 'Saucen & Pasten',
+        nav_sub_ready_to_eat: 'Fertiggerichte',
+        nav_sub_snacks: 'Snacks',
+        nav_sub_dairy: 'Milchprodukte & Eier',
+        nav_sub_paneer: 'Paneer & Tofu',
+        nav_sub_frozen_meals: 'Tiefkühlgerichte',
+        nav_sub_meat: 'Fleisch & Geflügel',
+        nav_sub_incense: 'Räucherstäbchen & Puja',
+        nav_sub_personal_care: 'Körperpflege',
+        nav_sub_cookware: 'Kochgeschirr',
+
+        // Cart Drawer Specifics
+        cart_summary: "Ihr Warenkorb",
+        cart_subtotal: "Zwischensumme",
+        cart_tax: "MwSt.",
+        cart_delivery: "Versandkosten",
+        cart_total: "Gesamtbetrag",
+        cart_empty: "Ihr Warenkorb ist leer",
+        cart_empty_desc: "Fügen Sie Produkte hinzu, um zu beginnen!",
+        cart_continue_shopping: "Weiter einkaufen",
+        cart_unit_prefix: "1",
+        cart_unit_default: "Einheit",
+
+        // Search Overlay Specifics
+        search_suggestions: "Top-Vorschläge",
+        search_popular_cats: "Beliebte Kategorien",
+        search_view_all: "Alle Ergebnisse anzeigen für",
+        search_no_results: "Keine Artikel gefunden",
+        search_no_results_desc: "Suchen Sie nach etwas anderem, z.B. \"Bio-Äpfel\"",
+        search_shortcut_nav: "zum Navigieren",
+        search_shortcut_select: "zum Auswählen",
+        search_powered_by: "Unterstützt durch Baksho",
+
+        // Status
+        instock: "Auf Lager",
+        coming_soon: "Demnächst",
+        limited_stock: "Begrenzter Vorrat",
 
         // Checkout Page
         checkout: "Kasse",
