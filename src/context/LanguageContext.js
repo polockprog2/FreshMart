@@ -9,6 +9,7 @@ export function LanguageProvider({ children }) {
 
     // Load language from localStorage on mount
     useEffect(() => {
+        if (typeof window === 'undefined') return;
         const savedLang = localStorage.getItem('language');
         if (savedLang) {
             setLanguage(savedLang);
@@ -17,7 +18,9 @@ export function LanguageProvider({ children }) {
 
     const changeLanguage = (lang) => {
         setLanguage(lang);
-        localStorage.setItem('language', lang);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('language', lang);
+        }
     };
 
     return (

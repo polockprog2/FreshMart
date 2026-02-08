@@ -22,6 +22,10 @@ export const CartProvider = ({ children }) => {
 
     // Load cart from localStorage on mount
     useEffect(() => {
+        if (typeof window === 'undefined') {
+            setIsLoading(false);
+            return;
+        }
         const savedCart = localStorage.getItem('cart');
         if (savedCart) {
             try {
@@ -35,7 +39,7 @@ export const CartProvider = ({ children }) => {
 
     // Save cart to localStorage whenever it changes
     useEffect(() => {
-        if (!isLoading) {
+        if (!isLoading && typeof window !== 'undefined') {
             localStorage.setItem('cart', JSON.stringify(cartItems));
         }
     }, [cartItems, isLoading]);

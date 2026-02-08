@@ -22,6 +22,10 @@ export const UserProvider = ({ children }) => {
 
     // Load user from localStorage on mount
     useEffect(() => {
+        if (typeof window === 'undefined') {
+            setIsLoading(false);
+            return;
+        }
         const savedUser = localStorage.getItem('user');
         if (savedUser) {
             try {
@@ -35,7 +39,7 @@ export const UserProvider = ({ children }) => {
 
     // Save user to localStorage whenever it changes
     useEffect(() => {
-        if (!isLoading) {
+        if (!isLoading && typeof window !== 'undefined') {
             if (user) {
                 localStorage.setItem('user', JSON.stringify(user));
             } else {

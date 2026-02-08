@@ -11,6 +11,11 @@ export function BannerProvider({ children }) {
 
     // Initial load from localStorage or default data
     useEffect(() => {
+        if (typeof window === 'undefined') {
+            setBanners(initialBanners);
+            setIsLoaded(true);
+            return;
+        }
         const savedBanners = localStorage.getItem('baksho_banners');
         if (savedBanners) {
             setBanners(JSON.parse(savedBanners));
@@ -23,7 +28,7 @@ export function BannerProvider({ children }) {
 
     // Save to localStorage whenever banners change
     useEffect(() => {
-        if (isLoaded) {
+        if (isLoaded && typeof window !== 'undefined') {
             localStorage.setItem('baksho_banners', JSON.stringify(banners));
         }
     }, [banners, isLoaded]);

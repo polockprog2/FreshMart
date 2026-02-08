@@ -21,6 +21,8 @@ export const UIProvider = ({ children }) => {
 
     // Global keyboard listener for CMD+K / CTRL+K
     useEffect(() => {
+        if (typeof window === 'undefined') return;
+
         const handleKeyDown = (e) => {
             // Open search on CMD+K / CTRL+K
             if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
