@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { searchProducts } from '@/data/products';
+import { searchProducts as searchProductsUtil } from '@/utils/helpers';
+import { getProducts } from '@/api/product.api';
 import { formatPrice } from '@/utils/helpers';
 import { useLanguage } from '@/context/LanguageContext';
 import { translations } from '@/data/translations';
@@ -14,6 +15,7 @@ import { translations } from '@/data/translations';
 export default function SearchOverlay({ isOpen, onClose }) {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const { language } = useLanguage();
     const t = translations[language] || translations.EN;
     const inputRef = useRef(null);
@@ -35,18 +37,32 @@ export default function SearchOverlay({ isOpen, onClose }) {
             if (mounted) {
                 setQuery('');
                 setResults([]);
+                setIsLoading(false);
             }
         }
     }, [isOpen, mounted]);
 
     // Handle search logic
     useEffect(() => {
-        if (query.trim().length > 1) {
-            const filtered = searchProducts(query);
-            setResults(filtered.slice(0, 8)); // Limit to top 8 results
-        } else {
-            setResults([]);
-        }
+        const performSearch = async () => {
+            if (query.trim().length > 1) {
+                setIsLoading(true);
+                try {
+                    const response = await getProducts({ search: query, limit: 8 });
+                    setResults(response.data || response);
+                } catch (error) {
+                    console.error('Search failed:', error);
+                    setResults([]);
+                } finally {
+                    setIsLoading(false);
+                }
+            } else {
+                setResults([]);
+            }
+        };
+
+        const debounce = setTimeout(performSearch, 400);
+        return () => clearTimeout(debounce);
     }, [query]);
 
     // Handle ESC key to close
@@ -77,7 +93,13 @@ export default function SearchOverlay({ isOpen, onClose }) {
             >
                 {/* Search Input Area */}
                 <div className="p-8 border-b border-gray-100 flex items-center gap-6">
-                    <div className="text-3xl animate-pulse">🔍</div>
+                    <div className="text-3xl flex items-center justify-center w-10">
+                        {isLoading ? (
+                            <div className="w-8 h-8 border-4 border-[#003B4A]/10 border-t-[#003B4A] rounded-full animate-spin"></div>
+                        ) : (
+                            <span className="animate-pulse">🔍</span>
+                        )}
+                    </div>
                     <input
                         ref={inputRef}
                         type="text"

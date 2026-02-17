@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
 import { translations } from '@/data/translations';
-import { getOrderById } from '@/data/orders';
+import { getOrderById } from '@/api/order.api';
 import { formatPrice, formatDate } from '@/utils/helpers';
 
 export default function OrderSuccessPage() {
@@ -27,18 +27,29 @@ function OrderSuccessContent() {
     const { language } = useLanguage();
     const t = translations[language] || translations.EN;
     const [order, setOrder] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const orderId = searchParams.get('orderId');
-        if (orderId) {
-            const orderData = getOrderById(orderId);
-            setOrder(orderData);
-        } else {
-            router.push('/');
-        }
+        const fetchOrder = async () => {
+            try {
+                const orderId = searchParams.get('orderId');
+                if (orderId) {
+                    const orderData = await getOrderById(orderId);
+                    setOrder(orderData);
+                } else {
+                    router.push('/');
+                }
+            } catch (error) {
+                console.error('Failed to fetch order:', error);
+                router.push('/');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchOrder();
     }, [searchParams, router]);
 
-    if (!order) {
+    if (isLoading || !order) {
         return null;
     }
 

@@ -7,7 +7,7 @@ import { useUser } from '@/context/UserContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { translations } from '@/data/translations';
 import { formatPrice } from '@/utils/helpers';
-import { createOrder } from '@/data/orders';
+import { createOrder } from '@/api/order.api';
 
 export default function CheckoutPage() {
     const router = useRouter();
@@ -29,6 +29,7 @@ export default function CheckoutPage() {
     });
 
     const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Redirect if cart is empty - Move to useEffect to prevent render-time update error
     useEffect(() => {
@@ -53,52 +54,64 @@ export default function CheckoutPage() {
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.firstName.trim()) newErrors.firstName = t.first_name_req;
-        if (!formData.lastName.trim()) newErrors.lastName = t.last_name_req;
-        if (!formData.email.trim()) newErrors.email = t.email_req;
-        if (!formData.phone.trim()) newErrors.phone = t.phone_req;
-        if (!formData.street.trim()) newErrors.street = t.street_req;
-        if (!formData.city.trim()) newErrors.city = t.city_req;
-        if (!formData.state.trim()) newErrors.state = t.state_req;
-        if (!formData.zipCode.trim()) newErrors.zipCode = t.zip_req;
+        if (!formData.firstName.trim()) newErrors.firstName = t.first_name_req || 'First name is required';
+        if (!formData.lastName.trim()) newErrors.lastName = t.last_name_req || 'Last name is required';
+        if (!formData.email.trim()) {
+            newErrors.email = t.email_req || 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = t.email_invalid || 'Invalid email format';
+        }
+        if (!formData.phone.trim()) newErrors.phone = t.phone_req || 'Phone number is required';
+        if (!formData.street.trim()) newErrors.street = t.street_req || 'Street address is required';
+        if (!formData.city.trim()) newErrors.city = t.city_req || 'City is required';
+        if (!formData.state.trim()) newErrors.state = t.state_req || 'State is required';
+        if (!formData.zipCode.trim()) newErrors.zipCode = t.zip_req || 'Zip code is required';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!validateForm()) {
             return;
         }
 
-        const orderData = {
-            userId: user?.id || null,
-            items: cartItems.map(item => ({
-                productId: item.id,
-                productName: item.name,
-                quantity: item.quantity,
-                price: item.price,
-                image: item.image
-            })),
-            subtotal: getCartSubtotal(),
-            tax: getCartTax(),
-            deliveryFee: getDeliveryFee(),
-            total: getCartGrandTotal(),
-            deliveryAddress: {
-                street: formData.street,
-                city: formData.city,
-                state: formData.state,
-                zipCode: formData.zipCode
-            },
-            paymentMethod: formData.paymentMethod === 'credit-card' ? t.credit_card : t.debit_card,
-            estimatedDelivery: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-        };
+        setIsSubmitting(true);
+        try {
+            const orderData = {
+                userId: user?.id || null,
+                items: cartItems.map(item => ({
+                    productId: item.id,
+                    productName: item.name,
+                    quantity: item.quantity,
+                    price: item.price,
+                    image: item.image
+                })),
+                subtotal: getCartSubtotal(),
+                tax: getCartTax(),
+                deliveryFee: getDeliveryFee(),
+                total: getCartGrandTotal(),
+                deliveryAddress: {
+                    street: formData.street,
+                    city: formData.city,
+                    state: formData.state,
+                    zipCode: formData.zipCode
+                },
+                paymentMethod: formData.paymentMethod === 'credit-card' ? t.credit_card : t.debit_card,
+                estimatedDelivery: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+            };
 
-        const order = createOrder(orderData);
-        clearCart();
-        router.push(`/order-success?orderId=${order.id}`);
+            const response = await createOrder(orderData);
+            const orderId = response.id || response.data?.id || Date.now();
+            clearCart();
+            router.push(`/order-success?orderId=${orderId}`);
+        } catch (error) {
+            console.error('Failed to create order:', error);
+            setErrors({ submit: t.order_error || 'Failed to create order. Please try again.' });
+            setIsSubmitting(false);
+        }
     };
 
     if (cartItems.length === 0) {

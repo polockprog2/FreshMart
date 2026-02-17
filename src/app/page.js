@@ -8,8 +8,8 @@ import ProductCard from '@/components/ProductCard';
 import CategoryCard from '@/components/CategoryCard';
 import TrustSection from '@/components/TrustSection';
 import BannerSection from '@/components/BannerSection';
-import { getFeaturedProducts, getDealsProducts } from '@/data/products';
 import { categories } from '@/data/categories';
+import { getProducts } from '@/api/product.api';
 import { useLanguage } from '@/context/LanguageContext';
 import { translations } from '@/data/translations';
 import SkeletonCard from '@/components/SkeletonCard';
@@ -26,16 +26,26 @@ export default function Home() {
   const t = translations[language] || translations.EN;
 
   useEffect(() => {
-    // Simulate premium loading delay
-    const timer = setTimeout(() => {
-      setFeaturedProducts(getFeaturedProducts().slice(0, 8));
-      const deals = getDealsProducts();
-      setWeeklyDeals(deals.slice(0, 8));
-      setValueDeals(deals.slice(8, 16));
-      setIsDataLoading(false);
-    }, 1500);
+    const fetchHomeData = async () => {
+      try {
+        const response = await getProducts({ limit: 100 });
+        const products = response.data || response;
+        
+        // Separate featured products and deals
+        const featured = products.filter(p => p.featured).slice(0, 8);
+        const deals = products.filter(p => p.discount >= 20);
+        
+        setFeaturedProducts(featured.length > 0 ? featured : products.slice(0, 8));
+        setWeeklyDeals(deals.slice(0, 8));
+        setValueDeals(deals.slice(8, 16));
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+      } finally {
+        setIsDataLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
+    fetchHomeData();
   }, []);
 
   return (

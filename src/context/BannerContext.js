@@ -1,29 +1,52 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from 'react';
-import { initialBanners } from '@/data/banners';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 const BannerContext = createContext();
 
 export function BannerProvider({ children }) {
     const [banners, setBanners] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    // Initial load from localStorage or default data
+    // Load banners from API
     useEffect(() => {
         if (typeof window === 'undefined') {
-            setBanners(initialBanners);
             setIsLoaded(true);
             return;
         }
-        const savedBanners = localStorage.getItem('baksho_banners');
-        if (savedBanners) {
-            setBanners(JSON.parse(savedBanners));
-        } else {
-            setBanners(initialBanners);
-            localStorage.setItem('baksho_banners', JSON.stringify(initialBanners));
-        }
-        setIsLoaded(true);
+        
+        const fetchBanners = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/banners`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    const bannersData = data.data || data;
+                    setBanners(bannersData);
+                    localStorage.setItem('baksho_banners', JSON.stringify(bannersData));
+                } else {
+                    // Fallback to localStorage if API fails
+                    const savedBanners = localStorage.getItem('baksho_banners');
+                    if (savedBanners) {
+                        setBanners(JSON.parse(savedBanners));
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to fetch banners:', error);
+                // Fallback to localStorage
+                const savedBanners = localStorage.getItem('baksho_banners');
+                if (savedBanners) {
+                    setBanners(JSON.parse(savedBanners));
+                }
+            } finally {
+                setIsLoaded(true);
+            }
+        };
+        
+        fetchBanners();
     }, []);
 
     // Save to localStorage whenever banners change

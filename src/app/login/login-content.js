@@ -19,28 +19,51 @@ export default function LoginContent() {
         email: '',
         password: ''
     });
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+
+    const validate = () => {
+        const newErrors = {};
+        if (!formData.email) {
+            newErrors.email = t.email_req || 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = t.email_invalid || 'Invalid email format';
+        }
+
+        if (!formData.password) {
+            newErrors.password = t.password_req || 'Password is required';
+        } else if (formData.password.length < 6) {
+            newErrors.password = t.password_min || 'Password must be at least 6 characters';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
-        setError('');
+        if (errors[e.target.name]) {
+            setErrors({ ...errors, [e.target.name]: '' });
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!validate()) return;
+
         setIsLoading(true);
-        setError('');
+        setErrors({});
 
         const result = await login(formData.email, formData.password);
 
         if (result.success) {
             router.push(redirect || '/');
         } else {
-            setError(result.error);
+            setErrors({ submit: result.error });
         }
 
         setIsLoading(false);
@@ -66,13 +89,13 @@ export default function LoginContent() {
                     </div>
 
                     {/* Error Message */}
-                    {error && (
+                    {errors.submit && (
                         <div className="bg-red-50 border border-red-100 rounded-xl p-4 mb-6">
                             <p className="text-sm text-red-600 font-semibold flex items-center gap-2">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                {error}
+                                {errors.submit}
                             </p>
                         </div>
                     )}
@@ -88,9 +111,10 @@ export default function LoginContent() {
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-5 py-3.5 rounded-2xl bg-[#F9F7F2] border border-transparent focus:bg-white focus:border-[#003B4A]/20 focus:ring-4 focus:ring-[#003B4A]/5 outline-none transition-all duration-300 text-[#003B4A] font-bold text-sm placeholder-gray-400"
+                                className={`w-full px-5 py-3.5 rounded-2xl bg-[#F9F7F2] border ${errors.email ? 'border-red-500/50 ring-4 ring-red-500/5' : 'border-transparent'} focus:bg-white focus:border-[#003B4A]/20 focus:ring-4 focus:ring-[#003B4A]/5 outline-none transition-all duration-300 text-[#003B4A] font-bold text-sm placeholder-gray-400`}
                                 placeholder="name@company.com"
                             />
+                            {errors.email && <p className="text-red-500 text-[10px] font-black uppercase tracking-widest mt-1 ml-1">{errors.email}</p>}
                         </div>
 
                         <div className="space-y-1.5">
@@ -103,9 +127,10 @@ export default function LoginContent() {
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-5 py-3.5 rounded-2xl bg-[#F9F7F2] border border-transparent focus:bg-white focus:border-[#003B4A]/20 focus:ring-4 focus:ring-[#003B4A]/5 outline-none transition-all duration-300 text-[#003B4A] font-bold text-sm placeholder-gray-400"
+                                className={`w-full px-5 py-3.5 rounded-2xl bg-[#F9F7F2] border ${errors.password ? 'border-red-500/50 ring-4 ring-red-500/5' : 'border-transparent'} focus:bg-white focus:border-[#003B4A]/20 focus:ring-4 focus:ring-[#003B4A]/5 outline-none transition-all duration-300 text-[#003B4A] font-bold text-sm placeholder-gray-400`}
                                 placeholder="••••••••••••"
                             />
+                            {errors.password && <p className="text-red-500 text-[10px] font-black uppercase tracking-widest mt-1 ml-1">{errors.password}</p>}
                         </div>
 
                         <div className="flex items-center justify-between pt-1">

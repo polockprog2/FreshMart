@@ -4,10 +4,10 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/ProductCard';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import { products } from '@/data/products';
 import { sortProducts, filterByCategory, searchProductsUtil } from '@/utils/helpers';
 import { useLanguage } from '@/context/LanguageContext';
 import { translations } from '@/data/translations';
+import { getProducts } from '@/api/product.api';
 
 export default function ProductsPage() {
     return (
@@ -34,6 +34,26 @@ function ProductsContent() {
     const [inStockOnly, setInStockOnly] = useState(false);
     const [minRating, setMinRating] = useState(0);
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+    const [allProducts, setAllProducts] = useState([]); // Store all fetched products
+    const [error, setError] = useState(null);
+
+    // Fetch products from API
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setIsLoading(true);
+            try {
+                const response = await getProducts({ limit: 1000 });
+                setAllProducts(response.data || response);
+                setError(null);
+            } catch (err) {
+                console.error('Failed to fetch products:', err);
+                setError('Failed to load products');
+                setAllProducts([]);
+            }
+        };
+
+        fetchProducts();
+    }, []);
 
     useEffect(() => {
         const categoryParam = searchParams.get('category');
@@ -46,21 +66,21 @@ function ProductsContent() {
     }, [searchParams]);
 
     useEffect(() => {
-        let result = [...products];
+        let result = [...allProducts];
         result = filterByCategory(result, selectedCategory);
         if (searchQuery) {
             result = searchProductsUtil(result, searchQuery);
         }
         result = result.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
         if (inStockOnly) {
-            result = result.filter(p => p.inStock);
+            result = result.filter(p => p.inStock !== false);
         }
         if (minRating > 0) {
-            result = result.filter(p => p.rating >= minRating);
+            result = result.filter(p => (p.rating || 0) >= minRating);
         }
         result = sortProducts(result, sortBy);
         setFilteredProducts(result);
-    }, [selectedCategory, searchQuery, sortBy, priceRange, inStockOnly, minRating]);
+    }, [allProducts, selectedCategory, searchQuery, sortBy, priceRange, inStockOnly, minRating]);
 
     const categories = [
         { name: t.all_products, slug: 'all' },
@@ -72,19 +92,20 @@ function ProductsContent() {
     ];
 
     const getCategoryCount = (slug) => {
-        if (slug === 'all') return products.length;
-        return products.filter(p => p.category === slug).length;
+        if (slug === 'all') return allProducts.length;
+        return allProducts.filter(p => p.category === slug).length;
     };
 
     const getStats = () => {
-        const allProducts = selectedCategory === 'all' ? products : products.filter(p => p.category === selectedCategory);
-        const prices = allProducts.map(p => p.price);
+        const products = selectedCategory === 'all' ? allProducts : allProducts.filter(p => p.category === selectedCategory);
+        if (products.length === 0) return { min: 0, max: 0, avg: 0, inStock: 0, avgRating: 0 };
+        const prices = products.map(p => p.price);
         return {
             min: Math.min(...prices),
             max: Math.max(...prices),
             avg: (prices.reduce((a, b) => a + b, 0) / prices.length).toFixed(2),
-            inStock: allProducts.filter(p => p.inStock).length,
-            avgRating: (allProducts.reduce((a, b) => a + b.rating, 0) / allProducts.length).toFixed(1)
+            inStock: products.filter(p => p.inStock !== false).length,
+            avgRating: (products.reduce((a, b) => a + (b.rating || 0), 0) / products.length).toFixed(1)
         };
     };
 

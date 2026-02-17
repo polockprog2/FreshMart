@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useUser } from '@/context/UserContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { translations } from '@/data/translations';
-import { getOrdersByUserId } from '@/data/orders';
+import { getOrders } from '@/api/order.api';
 import { formatPrice, formatDate, getOrderStatusColor } from '@/utils/helpers';
 
 export default function ProfilePage() {
@@ -14,18 +14,27 @@ export default function ProfilePage() {
     const { user, isAuthenticated } = useUser();
     const { language } = useLanguage();
     const t = translations[language] || translations.EN;
+    const [orders, setOrders] = useState([]);
 
     useEffect(() => {
         if (!isAuthenticated()) {
             router.push('/login');
+            return;
         }
-    }, [isAuthenticated, router]);
+        
+        const fetchOrders = async () => {
+            try {
+                if (user?.id) {
+                    const response = await getOrders({ userId: user.id });
+                    setOrders(response.data || response);
+                }
+            } catch (error) {
+                console.error('Failed to fetch orders:', error);
+            }
+        };
 
-    if (!user) {
-        return null;
-    }
-
-    const orders = getOrdersByUserId(user.id);
+        fetchOrders();
+    }, [isAuthenticated, router, user?.id]);
 
     return (
         <div className="min-h-screen bg-[#F9F7F2] py-16">

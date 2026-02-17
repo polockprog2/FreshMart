@@ -1,14 +1,38 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import CategoryCard from '@/components/CategoryCard';
-import { categories } from '@/data/categories';
 import { useLanguage } from '@/context/LanguageContext';
 import { translations } from '@/data/translations';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 export default function CategoriesPage() {
     const { language } = useLanguage();
     const t = translations[language] || translations.EN;
+    const [categories, setCategories] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/categories`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setCategories(data.data || data);
+                }
+            } catch (error) {
+                console.error('Failed to fetch categories:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     return (
         <div className="min-h-screen bg-[#F9F7F2] py-16">

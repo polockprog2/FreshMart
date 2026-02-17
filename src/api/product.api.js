@@ -1,78 +1,65 @@
 // product.api.js
-import { products } from '@/data/products';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 /**
- * Service to handle product data for Admin
- * This layer abstracts the data source (currently mock data).
+ * Service to handle product API calls
  */
 export const getProducts = async (params = {}) => {
-    const { page = 1, limit = 10, search = '', category = '', sort = 'newest' } = params;
+    const queryParams = new URLSearchParams();
+    if (params.page) queryParams.append('page', params.page);
+    if (params.limit) queryParams.append('limit', params.limit);
+    if (params.search) queryParams.append('search', params.search);
+    if (params.category) queryParams.append('category', params.category);
+    if (params.sort) queryParams.append('sort', params.sort);
 
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+    const url = `${API_BASE_URL}/products${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    });
 
-    let filtered = [...products];
-
-    // Search filter
-    if (search) {
-        filtered = filtered.filter(p =>
-            p.name.toLowerCase().includes(search.toLowerCase()) ||
-            p.id.toString().includes(search)
-        );
-    }
-
-    // Category filter
-    if (category) {
-        filtered = filtered.filter(p => p.category === category);
-    }
-
-    // Sorting
-    switch (sort) {
-        case 'price-low':
-            filtered.sort((a, b) => a.price - b.price);
-            break;
-        case 'price-high':
-            filtered.sort((a, b) => b.price - a.price);
-            break;
-        case 'name-az':
-            filtered.sort((a, b) => a.name.localeCompare(b.name));
-            break;
-        default: // newest
-            filtered.sort((a, b) => b.id - a.id);
-    }
-
-    // Pagination
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
-    const paginatedData = filtered.slice(startIndex, endIndex);
-
-    return {
-        data: paginatedData,
-        meta: {
-            page: parseInt(page),
-            limit: parseInt(limit),
-            total: filtered.length,
-            totalPages: Math.ceil(filtered.length / limit)
-        }
-    };
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
 };
 
 export const getProductById = async (id) => {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return products.find(p => p.id === parseInt(id));
+    const response = await fetch(`${API_BASE_URL}/products/${id}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
 };
 
 export const createProduct = async (productData) => {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return { success: true, data: { id: Date.now(), ...productData } };
+    const response = await fetch(`${API_BASE_URL}/products`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData)
+    });
+
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
 };
 
 export const updateProduct = async (id, productData) => {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return { success: true, data: { id, ...productData } };
+    const response = await fetch(`${API_BASE_URL}/products/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData)
+    });
+
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
 };
 
 export const deleteProduct = async (id) => {
-    await new Promise(resolve => setTimeout(resolve, 800));
-    return { success: true };
+    const response = await fetch(`${API_BASE_URL}/products/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
 };

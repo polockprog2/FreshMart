@@ -42,25 +42,25 @@ export default function RegisterPage() {
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.firstName.trim()) newErrors.firstName = 'required';
-        if (!formData.lastName.trim()) newErrors.lastName = 'required';
+        if (!formData.firstName.trim()) newErrors.firstName = t.first_name_req || 'First name is required';
+        if (!formData.lastName.trim()) newErrors.lastName = t.last_name_req || 'Last name is required';
         if (!formData.email.trim()) {
-            newErrors.email = 'required';
+            newErrors.email = t.email_req || 'Email is required';
         } else if (!isValidEmail(formData.email)) {
-            newErrors.email = 'invalid';
+            newErrors.email = t.email_invalid || 'Invalid email format';
         }
         if (!formData.phone.trim()) {
-            newErrors.phone = 'required';
+            newErrors.phone = t.phone_req || 'Phone number is required';
         } else if (!isValidPhone(formData.phone)) {
-            newErrors.phone = 'invalid';
+            newErrors.phone = t.phone_invalid || 'Invalid phone format';
         }
         if (!formData.password) {
-            newErrors.password = 'required';
+            newErrors.password = t.password_req || 'Password is required';
         } else if (formData.password.length < 6) {
-            newErrors.password = 'too short';
+            newErrors.password = t.password_min || 'Password must be at least 6 characters';
         }
         if (formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = 'mismatch';
+            newErrors.confirmPassword = t.password_mismatch || 'Passwords do not match';
         }
 
         setErrors(newErrors);
@@ -133,6 +133,7 @@ export default function RegisterPage() {
                                     className={`w-full px-5 py-3.5 rounded-2xl bg-[#F9F7F2] border transition-all duration-300 text-[#003B4A] font-bold text-sm ${errors.firstName ? 'border-red-500/50 bg-red-50/30' : 'border-transparent focus:bg-white focus:border-[#003B4A]/20'}`}
                                     placeholder="John"
                                 />
+                                {errors.firstName && <p className="text-red-500 text-[10px] font-black uppercase tracking-widest mt-1 ml-1">{errors.firstName}</p>}
                             </div>
                             <div className="space-y-1.5">
                                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest ml-1">
@@ -146,6 +147,7 @@ export default function RegisterPage() {
                                     className={`w-full px-5 py-3.5 rounded-2xl bg-[#F9F7F2] border transition-all duration-300 text-[#003B4A] font-bold text-sm ${errors.lastName ? 'border-red-500/50 bg-red-50/30' : 'border-transparent focus:bg-white focus:border-[#003B4A]/20'}`}
                                     placeholder="Doe"
                                 />
+                                {errors.lastName && <p className="text-red-500 text-[10px] font-black uppercase tracking-widest mt-1 ml-1">{errors.lastName}</p>}
                             </div>
                         </div>
 
@@ -161,6 +163,7 @@ export default function RegisterPage() {
                                 className={`w-full px-5 py-3.5 rounded-2xl bg-[#F9F7F2] border transition-all duration-300 text-[#003B4A] font-bold text-sm ${errors.email ? 'border-red-500/50 bg-red-50/30' : 'border-transparent focus:bg-white focus:border-[#003B4A]/20'}`}
                                 placeholder="name@company.com"
                             />
+                            {errors.email && <p className="text-red-500 text-[10px] font-black uppercase tracking-widest mt-1 ml-1">{errors.email}</p>}
                         </div>
 
                         <div className="space-y-1.5">
@@ -175,6 +178,7 @@ export default function RegisterPage() {
                                 className={`w-full px-5 py-3.5 rounded-2xl bg-[#F9F7F2] border transition-all duration-300 text-[#003B4A] font-bold text-sm ${errors.phone ? 'border-red-500/50 bg-red-50/30' : 'border-transparent focus:bg-white focus:border-[#003B4A]/20'}`}
                                 placeholder="+49 XXX XXXXXXX"
                             />
+                            {errors.phone && <p className="text-red-500 text-[10px] font-black uppercase tracking-widest mt-1 ml-1">{errors.phone}</p>}
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -190,6 +194,7 @@ export default function RegisterPage() {
                                     className={`w-full px-5 py-3.5 rounded-2xl bg-[#F9F7F2] border transition-all duration-300 text-[#003B4A] font-bold text-sm ${errors.password ? 'border-red-500/50 bg-red-50/30' : 'border-transparent focus:bg-white focus:border-[#003B4A]/20'}`}
                                     placeholder="••••••••"
                                 />
+                                {errors.password && <p className="text-red-500 text-[10px] font-black uppercase tracking-widest mt-1 ml-1">{errors.password}</p>}
                             </div>
                             <div className="space-y-1.5">
                                 <label className="block text-xs font-black text-gray-400 uppercase tracking-widest ml-1">
@@ -203,6 +208,7 @@ export default function RegisterPage() {
                                     className={`w-full px-5 py-3.5 rounded-2xl bg-[#F9F7F2] border transition-all duration-300 text-[#003B4A] font-bold text-sm ${errors.confirmPassword ? 'border-red-500/50 bg-red-50/30' : 'border-transparent focus:bg-white focus:border-[#003B4A]/20'}`}
                                     placeholder="••••••••"
                                 />
+                                {errors.confirmPassword && <p className="text-red-500 text-[10px] font-black uppercase tracking-widest mt-1 ml-1">{errors.confirmPassword}</p>}
                             </div>
                         </div>
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import ProductCard from '@/components/ProductCard';
-import { getDealsProducts } from '@/data/products';
+import { getProducts } from '@/api/product.api';
 
 /**
  * Value Deals Page
@@ -11,11 +11,25 @@ import { getDealsProducts } from '@/data/products';
  */
 export default function ValueDealsPage() {
     const [products, setProducts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Get all deals and show last 8 as value deals
-        const deals = getDealsProducts();
-        setProducts(deals.slice(8, 16));
+        const fetchDeals = async () => {
+            try {
+                const response = await getProducts({ limit: 100 });
+                const allProducts = response.data || response;
+                const deals = allProducts.filter(p => (p.discount || 0) >= 10).slice(0, 8);
+                setProducts(deals);
+            } catch (err) {
+                console.error('Failed to fetch deals:', err);
+                setError('Failed to load deals');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchDeals();
     }, []);
 
     return (

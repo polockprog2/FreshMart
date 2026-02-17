@@ -40,7 +40,15 @@ export const CartProvider = ({ children }) => {
     // Save cart to localStorage whenever it changes
     useEffect(() => {
         if (!isLoading && typeof window !== 'undefined') {
-            localStorage.setItem('cart', JSON.stringify(cartItems));
+            try {
+                localStorage.setItem('cart', JSON.stringify(cartItems));
+            } catch (error) {
+                console.error('Failed to save cart to localStorage:', error);
+                // Handle quota exceeded error or other storage issues
+                if (error.name === 'QuotaExceededError') {
+                    alert('Your shopping cart is too full to save locally. Please checkout soon!');
+                }
+            }
         }
     }, [cartItems, isLoading]);
 

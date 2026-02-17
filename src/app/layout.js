@@ -6,6 +6,7 @@ import { BannerProvider } from "@/context/BannerContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { UIProvider } from "@/context/UIContext";
 import LayoutContent from "@/components/LayoutContent";
+import Providers from "@/components/Providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,22 +25,23 @@ export const metadata = {
   },
 };
 
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`} suppressHydrationWarning>
-        <LanguageProvider>
-          <UIProvider>
-            <UserProvider>
-              <BannerProvider>
-                <CartProvider>
-                  <LayoutContent>{children}</LayoutContent>
-                </CartProvider>
-              </BannerProvider>
-            </UserProvider>
-          </UIProvider>
-        </LanguageProvider>
+        <Providers>
+          <LanguageProvider>
+            <UIProvider>
+              <UserProvider>
+                <BannerProvider>
+                  <CartProvider>
+                    <LayoutContent>{children}</LayoutContent>
+                  </CartProvider>
+                </BannerProvider>
+              </UserProvider>
+            </UIProvider>
+          </LanguageProvider>
+        </Providers>
       </body>
     </html>
   );

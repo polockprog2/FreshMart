@@ -9,7 +9,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 import { useCart } from '@/context/CartContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { translations } from '@/data/translations';
-import { getProductById, products } from '@/data/products';
+import { getProductById } from '@/api/product.api';
 import { formatPrice } from '@/utils/helpers';
 
 export default function ProductDetailPage() {
@@ -27,19 +27,32 @@ export default function ProductDetailPage() {
     const [isAdding, setIsAdding] = useState(false);
 
     useEffect(() => {
-        const foundProduct = getProductById(params.id);
+        const fetchProduct = async () => {
+            try {
+                const product = await getProductById(params.id);
+                if (product) {
+                    setProduct(product);
+                    // Fetch related products
+                    const allProducts = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'}/products?limit=100`)
+                        .then(r => r.json())
+                        .then(res => res.data || res)
+                        .catch(() => []);
+                    const related = allProducts
+                        .filter(p => p.category === product.category && p.id !== product.id)
+                        .slice(0, 4);
+                    setRelatedProducts(related);
+                } else {
+                    setError(t.product_not_found);
+                }
+            } catch (err) {
+                console.error('Failed to fetch product:', err);
+                setError(t.product_not_found);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-        if (foundProduct) {
-            setProduct(foundProduct);
-            const related = products
-                .filter(p => p.category === foundProduct.category && p.id !== foundProduct.id)
-                .slice(0, 4);
-            setRelatedProducts(related);
-        } else {
-            setError(t.product_not_found);
-        }
-
-        setIsLoading(false);
+        fetchProduct();
     }, [params.id, t.product_not_found]);
 
     const handleAddToCart = () => {
